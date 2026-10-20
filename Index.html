@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roblox Clicker Simulator — Ultimate Edition</title>
+<style>
+:root{color-scheme:dark;--bg:#101323;--panel:#242a42;--panel2:#171c30;--purple:#8b5cf6;--gold:#facc15;--text:#f8fafc;--muted:#cbd5e1}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#28204a,#101323 55%);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}
+main{max-width:980px;margin:auto;padding:16px}
+.hero{text-align:center;padding:18px 8px}
+.hero h1{margin:0;color:var(--gold);font-size:clamp(2rem,6vw,3rem)}
+.hero p{margin:6px 0;color:#c4b5fd}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stat,.panel{background:var(--panel);border:1px solid #39415f;border-radius:16px;padding:14px}
+.stat small{display:block;color:var(--muted)}
+.stat strong{font-size:clamp(1.1rem,3vw,1.65rem);color:var(--gold);overflow-wrap:anywhere}
+.arena{margin-top:12px;border-radius:20px;padding:18px;background:#236547;text-align:center;transition:background .2s}
+.avatar{display:block;width:min(100%,260px);margin:12px auto;padding:25px 10px;background:#17152a;border:2px solid #6552a3;border-radius:18px;cursor:pointer;user-select:none}
+.avatar .face{font-size:4rem}
+.avatar .body{font-size:3.5rem;line-height:1.1}
+.avatar:active{transform:scale(.98)}
+button,input,select{font:inherit}
+button{border:0;border-radius:11px;padding:10px 13px;background:var(--purple);color:white;font-weight:700;cursor:pointer}
+button:hover{filter:brightness(1.12)}
+button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+.secondary{background:#475569}
+.danger{background:#b91c1c}
+.gold{background:#a16207}
+.green{background:#15803d}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:12px 0}
+.tabs button{padding:10px 5px;background:#34304c}
+.tabs button.active{background:var(--purple)}
+.section{display:none}
+.section.active{display:block}
+.panel{margin:10px 0}
+.row{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.row>div:first-child{min-width:0;flex:1}
+.muted{color:var(--muted);font-size:.92rem}
+.goldtext{color:var(--gold)}
+.purpletext{color:#d8b4fe}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pet{display:flex;align-items:center;gap:10px}
+.petemoji{font-size:2rem}
+.pill{display:inline-block;border-radius:999px;padding:3px 9px;background:#43386a;font-size:.8rem}
+.rarity-Common{color:#e2e8f0}
+.rarity-Rare{color:#7dd3fc}
+.rarity-Epic{color:#c4b5fd}
+.rarity-Legendary{color:#facc15}
+.rarity-Secret{color:#f0abfc}
+.rarity-OWNER{color:#facc15}
+.bossbar{height:13px;border-radius:20px;background:#171323;overflow:hidden}
+.bossbar span{display:block;height:100%;background:#ef4444;width:100%}
+input,select{width:100%;padding:10px;border:1px solid #4b5270;border-radius:10px;background:#111827;color:white;margin:5px 0 10px}
+label{display:block;color:var(--muted);margin-top:8px}
+textarea{width:100%;min-height:100px;padding:10px;border-radius:10px;background:#111827;color:white;border:1px solid #4b5270;overflow-wrap:anywhere}
+.notice{padding:10px;background:#171c30;border-radius:10px;margin-top:10px;color:#e9d5ff}
+.machine{text-align:center;background:linear-gradient(135deg,#30134d,#14162d);border:1px solid #8b5cf6}
+.machine .slot{font-size:4rem;letter-spacing:8px;padding:14px}
+.footer{color:#94a3b8;text-align:center;font-size:.8rem;padding:20px 0}
+@media(max-width:620px){
+ main{padding:10px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .grid{grid-template-columns:1fr}
+ .row{align-items:flex-start}
+ .row button{max-width:48%}
+}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+<h1>ROBLOX CLICKER</h1>
+<p>ULTIMATE EDITION · Click • Hatch • Battle • Rebirth</p>
+</header>
+
+<div class="stats">
+ <div class="stat"><small>🪙 Coins</small><strong id="coins">0</strong></div>
+ <div class="stat"><small>👆 Per click</small><strong id="clickPower">1</strong></div>
+ <div class="stat"><small>⚡ Auto clicks/sec</small><strong id="autoSpeed">0</strong></div>
+ <div class="stat"><small>♻️ Rebirths / Tokens</small><strong id="rebirthStats">0 / 0</strong></div>
+</div>
+
+<section class="arena" id="arena">
+ <h2 id="worldTitle">🌳 Starter World</h2>
+ <button class="avatar" id="clickCharacter" aria-label="Click your character">
+  <div class="face" id="avatarFace">🟨</div>
+  <div class="body">🟦</div>
+  <div>🟦　🟦</div>
+  <b>TAP TO EARN!</b>
+ </button>
+ <div id="clickLabel">Earn 1 coin per tap</div>
+ <div class="notice" id="notice" role="status">Welcome! Click your character to start earning coins.</div>
+</section>
+
+<nav class="tabs">
+ <button class="active" data-tab="shop">🛒 Shop</button>
+ <button data-tab="pets">🥚 Pets</button>
+ <button data-tab="gambler">🎰 Gambler</button>
+ <button data-tab="boss">👑 Bosses</button>
+ <button data-tab="worlds">🌎 Worlds</button>
+ <button data-tab="rebirth">♻️ Rebirth</button>
+ <button data-tab="admin">🔐 Admin</button>
+ <button data-tab="save">💾 Save</button>
+</nav>
+
+<section class="section active" id="shop">
+ <div class="panel">
+  <h2>🛒 Click Upgrade Shop</h2>
+  <div class="row">
+   <div>
+    <b>Stronger Clicker</b>
+    <div class="muted">+1 base click power</div>
+    <div class="goldtext" id="upgradeCost">25 coins</div>
+    <div class="muted">Level <span id="upgradeLevel">0</span></div>
+   </div>
+   <button id="buyUpgrade">Upgrade</button>
+  </div>
+ </div>
+
+ <div class="panel">
+  <div class="row">
+   <div>
+    <b>💥 Super Clicker</b>
+    <div class="muted">Double your base click power.</div>
+    <div class="goldtext">500 coins</div>
+   </div>
+   <button id="buySuper">Buy</button>
+  </div>
+ </div>
+
+ <div class="panel">
+  <h2>⚡ Auto Clicker</h2>
+  <div id="autoDescription" class="muted">Buy the starter bot for 5,000 coins.</div>
+  <p class="goldtext" id="autoEstimate"></p>
+  <button id="buyAuto">Buy Auto Clicker · 5,000 🪙</button>
+  <button id="claimAuto" class="green" hidden>Claim 10 Seconds of Auto Earnings</button>
+  <button id="upgradeAuto" hidden>Upgrade Auto Clicker</button>
+  <div class="muted" id="autoNext"></div>
+  <p class="muted">Once unlocked, the auto clicker runs automatically while this game page is open.</p>
+ </div>
+</section>
+
+<section class="section" id="pets">
+ <div class="panel">
+  <h2>🥚 Mystery Egg Hatchery</h2>
+  <div class="muted">Common 55% · Rare 25% · Epic 13% · Legendary 6% · Secret 1%</div>
+  <p class="goldtext" id="eggCost">Egg cost: 250 coins</p>
+  <button id="hatchEgg">Hatch Egg!</button>
+  <h3>Your Pets (<span id="petCount">0</span>)</h3>
+  <div id="petInventory"></div>
+  <p class="muted">All owned pets stack their multipliers.</p>
+ </div>
+</section>
+
+<section class="section" id="gambler">
+ <div class="panel machine">
+  <h2>🎰 PET GAMBLER 3000</h2>
+  <div class="slot" id="slotMachine">🐾 ✨ 👑</div>
+  <p>Risk a pet. Chase the crown.</p>
+  <div class="goldtext">Owner Pet chance: 5%</div>
+  <div class="muted">35% chance for a Royal Pet · 60% chance to lose your selected pet</div>
+  <label for="gamblePet">Choose a pet to gamble</label>
+  <select id="gamblePet"></select>
+  <button id="gambleButton" class="gold">🎰 GAMBLE PET!</button>
+  <div class="notice" id="gambleResult">Choose a pet and spin the machine.</div>
+ </div>
+ <div class="panel">
+  <h3>How it works</h3>
+  <p class="muted">The chosen pet is consumed when you gamble. Win an Owner Pet (x100), a Royal Pet (x10), or lose the pet. Your actual game inventory is used.</p>
+ </div>
+</section>
+
+<section class="section" id="boss">
+ <div class="panel">
+  <h2>👹 Boss Arena</h2>
+  <h3 id="normalBossTitle">Boss Level 1</h3>
+  <p><b id="bossHpText">1,000 / 1,000 HP</b></p>
+  <div class="bossbar"><span id="bossHpBar"></span></div>
+  <p><button id="attackBoss">⚔️ Attack Normal Boss</button></p>
+  <div class="muted" id="bossStats">Defeated: 0</div>
+ </div>
+ <div class="panel machine">
+  <h2>👑 THE INFINITE KING</h2>
+  <div class="slot">👑 🔥 👑</div>
+  <p><b id="ownerBossHpText">1,000,000,000 HP</b></p>
+  <p class="muted">Only verified owner access can defeat this boss.</p>
+  <button id="ownerSmash" disabled>OWNER SMASH — Instant Defeat</button>
+  <div id="ownerBossReward" class="muted"></div>
+ </div>
+</section>
+
+<section class="section" id="worlds">
+ <div class="panel">
+  <h2>🌎 World Travel</h2>
+  <div id="worldList"></div>
+  <div id="secretPanel" hidden class="notice">
+   ♾️ Infinite secrets found: <span id="secretFinds">0</span>.
+   Each click in Infinite World has a 1.5% chance to grant 50,000 bonus coins!
+  </div>
+ </div>
+</section>
+
+<section class="section" id="rebirth">
+ <div class="panel">
+  <h2>♻️ Rebirth Station</h2>
+  <p>Reset coins and click upgrades to gain a rebirth token and permanent multiplier.</p>
+  <p class="goldtext">Rebirth cost: <b id="rebirthCost">10,000</b> coins</p>
+  <p id="rebirthInfo" class="muted"></p>
+  <button id="rebirthButton">Rebirth now</button>
+ </div>
+ <div class="panel">
+  <h3>🔮 Permanent Token Upgrade</h3>
+  <p class="muted">Spend 1 token to double your click multiplier.</p>
+  <button id="tokenUpgrade">Buy Permanent x2 Boost</button>
+ </div>
+</section>
+
+<section class="section" id="admin">
+ <div class="panel machine">
+  <h2>🔐 Owner Admin Panel</h2>
+  <p class="muted">Owner confirmation plus secret code required.</p>
+  <label><input type="checkbox" id="ownerCheck" style="width:auto"> I am the game owner</label>
+  <label for="adminCode">Secret unlock code</label>
+  <input id="adminCode" placeholder="Enter secret unlock code" autocomplete="off">
+  <button id="unlockAdmin">Unlock Admin Panel</button>
+  <button id="lockAdmin" class="secondary" hidden>Lock Admin Panel</button>
+  <div id="adminStatus" class="notice">Panel locked.</div>
+ </div>
+
+ <div class="panel" id="adminControls" hidden>
+  <h3>Admin Controls</h3>
+
+  <label for="adminAmount">Coins to grant</label>
+  <input id="adminAmount" type="number" value="1000000">
+  <button id="giveCoins">Give Coins</button>
+  <button id="zeroCoins" class="secondary">Set Coins to 0</button>
+
+  <label for="adminPower">Base click power</label>
+  <input id="adminPower" type="number" value="100">
+  <button id="setPower">Set Click Power</button>
+
+  <label for="adminPet">Pet to grant</label>
+  <select id="adminPet">
+   <option>Common</option>
+   <option>Rare</option>
+   <option>Epic</option>
+   <option>Legendary</option>
+   <option>Secret</option>
+   <option>OWNER</option>
+  </select>
+  <button id="givePet">Grant Pet</button>
+
+  <label for="adminWorld">World to unlock</label>
+  <select id="adminWorld"></select>
+  <button id="unlockWorld">Unlock Selected World</button>
+  <button id="unlockAllWorlds">Unlock All Worlds</button>
+
+  <label for="adminBossHP">Owner Boss HP</label>
+  <input id="adminBossHP" type="number" value="1000000000">
+  <button id="setBossHP">Set Owner Boss HP</button>
+  <button id="adminDefeatBoss">Defeat Owner Boss + Rewards</button>
+
+  <label for="adminAuto">Auto Clicker level</label>
+  <select id="adminAuto">
+   <option value="0">Off</option>
+   <option value="1">Level 1 · 10/sec</option>
+   <option value="2">Level 2 · 25/sec</option>
+   <option value="3">Level 3 · 50/sec</option>
+   <option value="4">Level 4 · 100/sec</option>
+  </select>
+  <button id="setAuto">Set Auto Clicker Level</button>
+
+  <label for="adminRebirths">Rebirths to grant</label>
+  <input id="adminRebirths" type="number" value="10">
+  <button id="giveRebirths">Grant Rebirths + Tokens</button>
+  <button id="giveToken">Grant 1 Token</button>
+ </div>
+ <p class="muted">Demo note: the owner checkbox and code are local game controls, not secure real-world identity verification.</p>
+</section>
+
+<section class="section" id="save">
+ <div class="panel">
+  <h2>💾 Save Your Game</h2>
+  <p class="muted">Progress saves automatically in this browser. You can also copy a portable save code.</p>
+  <button id="generateSave">Generate Save Code</button>
+  <textarea id="saveCode" placeholder="Your save code will appear here"></textarea>
+  <button id="copySave" class="secondary">Copy Save Code</button>
+  <label for="loadCode">Load a save code</label>
+  <textarea id="loadCode" placeholder="Paste a save code here"></textarea>
+  <button id="loadSave">Load Game</button>
+ </div>
+</section>
+
+<div class="footer">Unofficial Roblox-inspired fan game demo. Not affiliated with Roblox Corporation.</div>
+</main>
+
+<script>
+(() => {
+const SAVE_KEY='robloxClickerUltimate_v1';
+
+const worlds=[
+ {name:'Starter World',emoji:'🌳',cost:0,char:'🟨',color:'#236547'},
+ {name:'Desert World',emoji:'🏜️',cost:500,char:'🤠',color:'#95602e'},
+ {name:'Ice World',emoji:'❄️',cost:2500,char:'🥶',color:'#226d9e'},
+ {name:'Lava World',emoji:'🌋',cost:10000,char:'😈',color:'#a53630'},
+ {name:'Galaxy World',emoji:'🌌',cost:50000,char:'👽',color:'#54349a'},
+ {name:'Infinite World',emoji:'♾️',cost:1000000,char:'🌠',color:'#35146b'}
+];
+
+const petTypes=[
+ {name:'Puppy',emoji:'🐶',rarity:'Common',mult:1.2},
+ {name:'Kitty',emoji:'🐱',rarity:'Common',mult:1.3},
+ {name:'Bunny',emoji:'🐰',rarity:'Rare',mult:1.7},
+ {name:'Fox',emoji:'🦊',rarity:'Epic',mult:2.5},
+ {name:'Dragon',emoji:'🐉',rarity:'Legendary',mult:5},
+ {name:'Galaxy Dominus',emoji:'👑',rarity:'Secret',mult:15},
+ {name:'Owner Pet',emoji:'👑',rarity:'OWNER',mult:100},
+ {name:'Royal Pet',emoji:'🐲',rarity:'Mythic',mult:10}
+];
+
+const defaultState=()=>({
+ coins:0,
+ power:1,
+ rebirths:0,
+ tokens:0,
+ world:0,
+ unlocked:[0],
+ pets:[],
+ upgradeLevel:0,
+ rebirthUpgrade:0,
+ autoLevel:0,
+ bossHP:1000,
+ bossLevel:1,
+ bossWins:0,
+ ownerBossHP:1000000000,
+ ownerBossWins:0,
+ secretFinds:0,
+ totalClicks:0,
+ ownerVerified:false
+});
+
+let s=defaultState(),adminOpen=false,autoTimer=null;
+const $=id=>document.getElementById(id);
+const fmt=n=>Math.floor(n).toLocaleString();
+
+function notify(msg){
+ $('notice').textContent=msg;
+}
+
+function petMultiplier(){
+ return s.pets.reduce((sum,p)=>sum+(Number(p.mult)-1),1);
+}
+
+function clickGain(){
+ return Math.max(1,Math.floor(s.power*petMultiplier()*Math.pow(2,s.rebirthUpgrade+s.rebirths)));
+}
+
+function upgradeCost(){
+ return Math.floor(25*Math.pow(1.8,s.upgradeLevel));
+}
+
+function rebirthCost(){
+ return 10000*Math.pow(2,s.rebirths);
+}
+
+function autoSpeed(){
+ return [0,10,25,50,100][s.autoLevel]||0;
+}
+
+function autoCost(){
+ return [0,5000,25000,100000,500000][s.autoLevel]||0;
+}
+
+function saveLocal(){
+ try{localStorage.setItem(SAVE_KEY,JSON.stringify(s))}catch(e){}
+}
+
+function addCoins(n){
+ if(Number.isFinite(n)&&n>0)s.coins+=n;
+}
+
+function render(){
+ $('coins').textContent=fmt(s.coins);
+ $('clickPower').textContent=fmt(clickGain());
+ $('autoSpeed').textContent=autoSpeed();
+ $('rebirthStats').textContent=`${s.rebirths} / ${s.tokens}`;
+
+ $('arena').style.background=worlds[s.world].color;
+ $('worldTitle').textContent=worlds[s.world].emoji+' '+worlds[s.world].name;
+ $('avatarFace').textContent=worlds[s.world].char;
+ $('clickLabel').textContent=`Earn ${fmt(clickGain())} coins per tap`;
+
+ $('upgradeCost').textContent=fmt(upgradeCost())+' coins';
+ $('upgradeLevel').textContent=s.upgradeLevel;
+ $('buyUpgrade').disabled=s.coins<upgradeCost();
+ $('buySuper').disabled=s.coins<500;
+
+ $('eggCost').textContent='Egg cost: '+fmt(s.world===5?10000:250)+' coins';
+ $('hatchEgg').disabled=s.coins<(s.world===5?10000:250);
+ $('petCount').textContent=s.pets.length;
+
+ $('autoDescription').textContent=s.autoLevel===0
+  ?'Buy the starter bot for 5,000 coins.'
+  :`Auto Clicker Level ${s.autoLevel} is running at ${autoSpeed()} clicks per second.`;
+
+ $('buyAuto').hidden=s.autoLevel>0;
+ $('buyAuto').disabled=s.coins<5000;
+ $('claimAuto').hidden=s.autoLevel===0;
+ $('upgradeAuto').hidden=s.autoLevel===0||s.autoLevel===4;
+
+ $('autoEstimate').textContent=s.autoLevel
+  ?`Approx. ${fmt(autoSpeed()*clickGain())} coins per second`
+  :'';
+
+ $('autoNext').textContent=s.autoLevel>0&&s.autoLevel<4
+  ?`Next level: ${[0,10,25,50,100][s.autoLevel+1]} clicks/sec · ${fmt([0,5000,25000,100000,500000][s.autoLevel+1])} coins`
+  :s.autoLevel===4
+   ?'Maximum speed reached: 100 clicks/sec!'
+   :'';
+
+ $('upgradeAuto').textContent=s.autoLevel<4
+  ?`Upgrade Auto Clicker · ${fmt([0,5000,25000,100000,500000][s.autoLevel+1])} coins`
+  :'MAX LEVEL';
+
+ $('upgradeAuto').disabled=s.autoLevel<4&&s.coins<[0,5000,25000,100000,500000][s.autoLevel+1];
+
+ $('claimAuto').textContent=`Claim 10 Seconds of Auto Earnings (${fmt(autoSpeed()*clickGain()*10)} coins)`;
+
+ $('rebirthCost').textContent=fmt(rebirthCost());
+ $('rebirthInfo').textContent=`Rebirths: ${s.rebirths} · Tokens: ${s.tokens} · Permanent token upgrades: ${s.rebirthUpgrade}`;
+ $('rebirthButton').disabled=s.coins<rebirthCost();
+ $('tokenUpgrade').disabled=s.tokens<1;
+
+ $('normalBossTitle').textContent=`Boss Level ${s.bossLevel}`;
+ $('bossHpText').textContent=`${fmt(Math.max(0,s.bossHP))} / ${fmt(1000*s.bossLevel)} HP`;
+ $('bossHpBar').style.width=Math.max(0,Math.min(100,s.bossHP/(1000*s.bossLevel)*100))+'%';
+ $('bossStats').textContent=`Defeated: ${s.bossWins} · Next reward: ${fmt(500*s.bossLevel)} coins`;
+
+ $('ownerBossHpText').textContent=s.ownerBossHP<=0?'DEFEATED!':fmt(s.ownerBossHP)+' HP';
+ $('ownerSmash').disabled=!adminOpen||s.ownerBossHP<=0;
+ $('ownerBossReward').textContent=`Owner victories: ${s.ownerBossWins}`;
+
+ $('secretPanel').hidden=s.world!==5;
+ $('secretFinds').textContent=s.secretFinds;
+
+ renderPets();
+ renderWorlds();
+ renderGambler();
+
+ $('adminControls').hidden=!adminOpen;
+ $('lockAdmin').hidden=!adminOpen;
+ $('adminWorld').innerHTML=worlds.map((w,i)=>`<option value="${i}">${w.name}</option>`).join('');
+
+ saveLocal();
+}
+
+function renderPets(){
+ $('petInventory').innerHTML='';
+ if(!s.pets.length){
+  $('petInventory').innerHTML='<p class="muted">No pets yet. Hatch your first egg!</p>';
+  return;
+ }
+
+ s.pets.forEach((p,i)=>{
+  const div=document.createElement('div');
+  div.className='panel pet';
+
+  const emoji=document.createElement('span');
+  emoji.className='petemoji';
+  emoji.textContent=p.emoji;
+
+  const info=document.createElement('div');
+  info.style.flex='1';
+
+  const name=document.createElement('b');
+  name.textContent=p.name;
+
+  const detail=document.createElement('div');
+  detail.className='muted';
+  detail.textContent=`${p.rarity} · x${p.mult} multiplier`;
+
+  info.append(name,detail);
+
+  const del=document.createElement('button');
+  del.className='secondary';
+  del.textContent='Keep';
+  del.disabled=true;
+
+  div.append(emoji,info,del);
+  $('petInventory').append(div);
+ });
+}
+
+function renderWorlds(){
+ $('worldList').innerHTML='';
+
+ worlds.forEach((w,i)=>{
+  const div=document.createElement('div');
+  div.className='panel row';
+
+  const info=document.createElement('div');
+  const name=document.createElement('b');
+  name.textContent=`${w.emoji} ${w.name}`;
+
+  const cost=document.createElement('div');
+  cost.className='muted';
+  cost.textContent=i===0?'Free':`${fmt(w.cost)} coins`;
+
+  info.append(name,cost);
+
+  const btn=document.createElement('button');
+
+  if(s.unlocked.includes(i)){
+   btn.textContent=s.world===i?'Here':'Travel';
+   btn.disabled=s.world===i;
+   btn.onclick=()=>{
+    s.world=i;
+    notify('Welcome to '+w.name+'!');
+    render();
+   };
+  }else{
+   btn.textContent='Unlock';
+   btn.disabled=s.coins<w.cost;
+   btn.onclick=()=>{
+    s.coins-=w.cost;
+    s.unlocked.push(i);
+    s.world=i;
+    notify(w.name+' unlocked!');
+    render();
+   };
+  }
+
+  div.append(info,btn);
+  $('worldList').append(div);
+ });
+}
+
+function renderGambler(){
+ const sel=$('gamblePet');
+ const previous=sel.value;
+ sel.innerHTML='';
+
+ s.pets.forEach((p,i)=>{
+  const o=document.createElement('option');
+  o.value=String(i);
+  o.textContent=`${p.emoji} ${p.name} — ${p.rarity} (x${p.mult})`;
+  sel.append(o);
+ });
+
+ $('gambleButton').disabled=s.pets.length===0;
+
+ if(s.pets.length===0){
+  const o=document.createElement('option');
+  o.textContent='No pets available';
+  sel.append(o);
+ }else if(previous&&Number(previous)<s.pets.length){
+  sel.value=previous;
+ }
+}
+
+function hatch(){
+ const cost=s.world===5?10000:250;
+ if(s.coins<cost)return;
+
+ const roll=Math.random()*100;
+ const idx=roll<1?5:roll<7?4:roll<20?3:roll<45?2:roll<72?1:0;
+
+ const p=petTypes[idx];
+ s.coins-=cost;
+ s.pets.push({...p,id:Date.now()+Math.random()});
+ notify(`🥚 You hatched ${p.rarity} ${p.emoji} ${p.name}!`);
+ render();
+}
+
+function gamble(){
+ if(!s.pets.length)return;
+
+ const i=Number($('gamblePet').value);
+ if(!Number.isInteger(i)||!s.pets[i])return;
+
+ $('slotMachine').textContent='🎰 ✨ 🎰';
+ $('gambleButton').disabled=true;
+
+ setTimeout(()=>{
+  const roll=Math.random()*100;
+
+  if(roll<5){
+   s.pets.splice(i,1);
+   s.pets.push({...petTypes[6],id:Date.now()+Math.random()});
+   $('gambleResult').textContent='👑 JACKPOT! You won an OWNER PET with x100 click power! Your gambled pet was consumed.';
+  }else if(roll<40){
+   s.pets.splice(i,1);
+   s.pets.push({...petTypes[7],id:Date.now()+Math.random()});
+   $('gambleResult').textContent='🐲 You won a Royal Pet (x10)! Your gambled pet was consumed.';
+  }else{
+   s.pets.splice(i,1);
+   $('gambleResult').textContent='💨 The machine swallowed your pet! Better luck next time.';
+  }
+
+  $('slotMachine').textContent=roll<5?'👑 👑 👑':roll<40?'🐲 ✨ 🐲':'💨 🐾 💨';
+  notify($('gambleResult').textContent);
+  render();
+ },700);
+}
+
+function attackBoss(){
+ const damage=clickGain();
+ s.bossHP-=damage;
+
+ if(s.bossHP<=0){
+  const reward=500*s.bossLevel;
+  s.coins+=reward;
+  s.bossWins++;
+  s.bossLevel++;
+  s.bossHP=1000*s.bossLevel;
+  notify(`🏆 Boss defeated! +${fmt(reward)} coins!`);
+ }else{
+  notify(`💥 Dealt ${fmt(damage)} damage!`);
+ }
+
+ render();
+}
+
+function ownerSmash(){
+ if(!adminOpen||s.ownerBossHP<=0)return;
+
+ s.ownerBossHP=0;
+ s.ownerBossWins++;
+ s.coins+=1000000;
+ s.pets.push({...petTypes[6],id:Date.now()+Math.random()});
+
+ notify('👑 OWNER BOSS DEFEATED! +1,000,000 coins and an Owner Pet!');
+ render();
+}
+
+function updateAutoTimer(){
+ if(autoTimer){
+  clearInterval(autoTimer);
+  autoTimer=null;
+ }
+
+ if(s.autoLevel>0){
+  const delay=1000/autoSpeed();
+
+  autoTimer=setInterval(()=>{
+   if(s.autoLevel>0){
+    s.coins+=clickGain();
+    s.totalClicks++;
+
+    if(s.world===5&&Math.random()<.015){
+     s.coins+=50000;
+     s.secretFinds++;
+     notify('✨ Auto click found an Infinite World secret! +50,000 coins!');
+    }
+
+    render();
+   }
+  },delay);
+ }
+}
+
+function validNum(id,min,max,integer=true){
+ const n=Number($(id).value);
+ return Number.isFinite(n)&&n>=min&&n<=max&&(!integer||Number.isInteger(n))?n:null;
+}
+
+document.querySelectorAll('[data-tab]').forEach(b=>{
+ b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));
+ });
+});
+
+$('clickCharacter').onclick=()=>{
+ const gain=clickGain();
+ s.coins+=gain;
+ s.totalClicks++;
+
+ if(s.world===5&&Math.random()<.015){
+  s.coins+=50000;
+  s.secretFinds++;
+  notify(`✨ INFINITE SECRET FOUND! +50,000 bonus coins!`);
+ }else{
+  notify(`+${fmt(gain)} coins!`);
+ }
+
+ render();
+};
+
+$('buyUpgrade').onclick=()=>{
+ const cost=upgradeCost();
+ if(s.coins>=cost){
+  s.coins-=cost;
+  s.power++;
+  s.upgradeLevel++;
+  notify('Clicker upgraded!');
+  render();
+ }
+};
+
+$('buySuper').onclick=()=>{
+ if(s.coins>=500){
+  s.coins-=500;
+  s.power*=2;
+  notify('Super Clicker purchased!');
+  render();
+ }
+};
+
+$('buyAuto').onclick=()=>{
+ if(s.coins>=5000&&s.autoLevel===0){
+  s.coins-=5000;
+  s.autoLevel=1;
+  notify('⚡ Auto Clicker unlocked at 10 clicks per second!');
+  updateAutoTimer();
+  render();
+ }
+};
+
+$('upgradeAuto').onclick=()=>{
+ if(s.autoLevel<4){
+  const cost=[0,5000,25000,100000,500000][s.autoLevel+1];
+
+  if(s.coins>=cost){
+   s.coins-=cost;
+   s.autoLevel++;
+   notify(`Auto Clicker upgraded to ${autoSpeed()} clicks/sec!`);
+   updateAutoTimer();
+   render();
+  }
+ }
+};
+
+$('claimAuto').onclick=()=>{
+ const gain=autoSpeed()*clickGain()*10;
+ s.coins+=gain;
+ s.totalClicks+=autoSpeed()*10;
+ notify(`Collected ${fmt(gain)} bonus auto-click coins!`);
+ render();
+};
+
+$('hatchEgg').onclick=hatch;
+$('gambleButton').onclick=gamble;
+$('attackBoss').onclick=attackBoss;
+$('ownerSmash').onclick=ownerSmash;
+
+$('rebirthButton').onclick=()=>{
+ if(s.coins>=rebirthCost()){
+  s.coins=0;
+  s.power=1;
+  s.upgradeLevel=0;
+  s.rebirths++;
+  s.tokens++;
+  notify('♻️ Rebirth complete! +1 token and a permanent boost.');
+  render();
+ }
+};
+
+$('tokenUpgrade').onclick=()=>{
+ if(s.tokens>0){
+  s.tokens--;
+  s.rebirthUpgrade++;
+  notify('Permanent x2 boost purchased!');
+  render();
+ }
+};
+
+$('unlockAdmin').onclick=()=>{
+ if($('ownerCheck').checked&&$('adminCode').value==='Besto Friendo'){
+  adminOpen=true;
+  s.ownerVerified=true;
+  $('adminStatus').textContent='🔓 OWNER ACCESS GRANTED';
+  notify('Admin Panel unlocked!');
+  render();
+ }else{
+  adminOpen=false;
+  $('adminStatus').textContent='⛔ Access denied. Confirm owner access and check the code.';
+  render();
+ }
+};
+
+$('lockAdmin').onclick=()=>{
+ adminOpen=false;
+ $('adminCode').value='';
+ $('adminStatus').textContent='Panel locked.';
+ render();
+};
+
+$('giveCoins').onclick=()=>{
+ const n=validNum('adminAmount',1,1e15,false);
+ if(n!==null){
+  addCoins(n);
+  notify('Admin granted '+fmt(n)+' coins.');
+  render();
+ }else{
+  notify('Enter a positive coin amount.');
+ }
+};
+
+$('zeroCoins').onclick=()=>{
+ s.coins=0;
+ notify('Admin set coins to zero.');
+ render();
+};
+
+$('setPower').onclick=()=>{
+ const n=validNum('adminPower',1,1e9);
+ if(n!==null){
+  s.power=n;
+  notify('Base click power set to '+fmt(n)+'.');
+  render();
+ }else{
+  notify('Enter a whole number from 1 to 1 billion.');
+ }
+};
+
+$('givePet').onclick=()=>{
+ const rarity=$('adminPet').value;
+ const p=rarity==='OWNER'?petTypes[6]:petTypes.find(x=>x.rarity===rarity);
+ s.pets.push({...p,id:Date.now()+Math.random()});
+ notify('Admin granted '+p.name+'!');
+ render();
+};
+
+$('unlockWorld').onclick=()=>{
+ const i=Number($('adminWorld').value);
+ if(!s.unlocked.includes(i))s.unlocked.push(i);
+ notify(worlds[i].name+' unlocked by admin.');
+ render();
+};
+
+$('unlockAllWorlds').onclick=()=>{
+ s.unlocked=worlds.map((_,i)=>i);
+ notify('All worlds unlocked!');
+ render();
+};
+
+$('setBossHP').onclick=()=>{
+ const n=validNum('adminBossHP',1,1e15,false);
+ if(n!==null){
+  s.ownerBossHP=n;
+  notify('Owner Boss HP updated.');
+  render();
+ }else{
+  notify('Enter positive boss HP.');
+ }
+};
+
+$('adminDefeatBoss').onclick=ownerSmash;
+
+$('setAuto').onclick=()=>{
+ s.autoLevel=Number($('adminAuto').value);
+ updateAutoTimer();
+ notify('Auto Clicker level set to '+s.autoLevel+'.');
+ render();
+};
+
+$('giveRebirths').onclick=()=>{
+ const n=validNum('adminRebirths',0,1e6);
+ if(n!==null){
+  s.rebirths+=n;
+  s.tokens+=n;
+  notify(`Granted ${n} rebirths and tokens.`);
+  render();
+ }else{
+  notify('Enter a whole number between 0 and 1 million.');
+ }
+};
+
+$('giveToken').onclick=()=>{
+ s.tokens++;
+ notify('Granted 1 token.');
+ render();
+};
+
+$('generateSave').onclick=()=>{
+ $('saveCode').value=JSON.stringify(s);
+ notify('Save code generated!');
+};
+
+$('copySave').onclick=async()=>{
+ try{
+  await navigator.clipboard.writeText($('saveCode').value);
+  notify('Save code copied!');
+ }catch(e){
+  $('saveCode').focus();
+  $('saveCode').select();
+  notify('Select and copy the save code manually.');
+ }
+};
+
+$('loadSave').onclick=()=>{
+ try{
+  const d=JSON.parse($('loadCode').value);
+
+  if(
+   !d||
+   !Array.isArray(d.unlocked)||
+   !Array.isArray(d.pets)||
+   ![
+    d.coins,d.power,d.rebirths,d.tokens,d.world,d.upgradeLevel,
+    d.rebirthUpgrade,d.autoLevel,d.bossHP,d.bossLevel,d.bossWins,
+    d.ownerBossHP,d.ownerBossWins,d.secretFinds,d.totalClicks
+   ].every(Number.isFinite)||
+   d.coins<0||
+   d.power<1||
+   d.rebirths<0||
+   d.tokens<0||
+   d.world<0||
+   d.world>=worlds.length||
+   d.autoLevel<0||
+   d.autoLevel>4||
+   !d.unlocked.includes(0)||
+   !d.unlocked.includes(d.world)||
+   d.unlocked.some(i=>!Number.isInteger(i)||i<0||i>=worlds.length)||
+   d.pets.some(p=>!petTypes.some(t=>t.name===p.name&&t.mult===p.mult&&t.rarity===p.rarity&&t.emoji===p.emoji))
+  ){
+   throw Error('Invalid save');
+  }
+
+  s={...defaultState(),...d};
+  adminOpen=false;
+  updateAutoTimer();
+  notify('Save loaded successfully!');
+  render();
+ }catch(e){
+  notify('Invalid save code. Copy the complete code and try again.');
+ }
+};
+
+try{
+ const saved=localStorage.getItem(SAVE_KEY);
+
+ if(saved){
+  const d=JSON.parse(saved);
+
+  if(d&&Array.isArray(d.unlocked)&&Array.isArray(d.pets)&&Number.isFinite(d.coins)&&Number.isFinite(d.world)&&d.world>=0&&d.world<worlds.length){
+   s={...defaultState(),...d};
+   s.ownerVerified=false;
+  }
+ }
+}catch(e){}
+
+render();
+updateAutoTimer();
+})();
+</script>
+</body>
+</html>
