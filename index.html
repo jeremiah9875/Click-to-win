@@ -24,7 +24,7 @@ button:hover:not(:disabled){filter:brightness(1.15)}
 .arena{margin-top:12px;text-align:center;background:#236547;border-radius:18px;padding:16px;transition:background .2s}
 .avatar{display:block;margin:12px auto;width:min(100%,260px);background:#17152a;border:2px solid #8b5cf6;border-radius:18px;padding:20px;user-select:none}
 .face{font-size:4rem}.body{font-size:3rem}
-.notice{background:#171c30;border-radius:10px;padding:10px;margin-top:10px;color:#e9d5ff}
+.notice{background:#171c30;border-radius:10px;padding:10px;margin-top:10px;color:#e9d5ff;overflow-wrap:anywhere}
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}
 .tabs button{background:#34304c;padding:10px 3px}
 .tabs button.active{background:var(--purple)}
@@ -54,7 +54,7 @@ textarea{min-height:100px;overflow-wrap:anywhere}
  main{padding:9px}.stats{grid-template-columns:repeat(2,1fr)}
  .tabs{grid-template-columns:repeat(3,1fr)}
  .grid{grid-template-columns:1fr}.row{align-items:flex-start}
- .row button{max-width:50%}
+ .row button{max-width:55%}
 }
 </style>
 </head>
@@ -119,10 +119,10 @@ textarea{min-height:100px;overflow-wrap:anywhere}
 <div id="autoDescription" class="muted"></div>
 <p id="autoEstimate" class="goldtext"></p>
 <button id="buyAuto">Buy Auto Clicker · 5,000 🪙</button>
-<button id="claimAuto" class="green" hidden>Claim 10 Seconds Earnings</button>
+<button id="toggleAuto" class="gold" hidden>⏸️ Turn Auto Clicker OFF</button>
 <button id="upgradeAuto" hidden>Upgrade Auto Clicker</button>
 <div id="autoNext" class="muted"></div>
-<p class="muted">Auto clicking works while this page is open.</p>
+<p class="muted">Turn auto clicking off whenever you want. Your purchased level stays unlocked.</p>
 </div>
 </section>
 
@@ -153,7 +153,7 @@ textarea{min-height:100px;overflow-wrap:anywhere}
 <select id="gamblePet"></select>
 <button id="gambleButton" class="gold">🎰 GAMBLE PET!</button>
 <div class="notice" id="gambleResult">Choose a pet and spin!</div>
-<p class="muted">The pet you choose is consumed on every spin, whether you win or lose.</p>
+<p class="muted">The selected pet is consumed on every spin, whether you win or lose.</p>
 </div>
 </section>
 
@@ -177,7 +177,9 @@ textarea{min-height:100px;overflow-wrap:anywhere}
 </section>
 
 <section class="section" id="worlds">
-<div class="panel"><h2>🌎 World Travel</h2><div id="worldList"></div>
+<div class="panel">
+<h2>🌎 World Travel</h2>
+<div id="worldList"></div>
 <div id="secretPanel" hidden class="notice">♾️ Secrets found: <span id="secretFinds">0</span>. Infinite World clicks can award 50,000 bonus coins!</div>
 </div>
 </section>
@@ -200,7 +202,6 @@ textarea{min-height:100px;overflow-wrap:anywhere}
 <section class="section" id="admin">
 <div class="panel machine">
 <h2>🔐 Owner Admin Panel</h2>
-<p class="muted">Enter the secret code to unlock the local demo admin panel.</p>
 <label><input type="checkbox" id="ownerCheck" style="width:auto"> I am the game owner</label>
 <label for="adminCode">Secret Code</label>
 <input id="adminCode" placeholder="Enter secret code" autocomplete="off">
@@ -245,8 +246,10 @@ textarea{min-height:100px;overflow-wrap:anywhere}
 
 <label for="adminAuto">Auto Clicker Level</label>
 <select id="adminAuto">
-<option value="0">Off</option><option value="1">Level 1 · 10/sec</option>
-<option value="2">Level 2 · 25/sec</option><option value="3">Level 3 · 50/sec</option>
+<option value="0">Off</option>
+<option value="1">Level 1 · 10/sec</option>
+<option value="2">Level 2 · 25/sec</option>
+<option value="3">Level 3 · 50/sec</option>
 <option value="4">Level 4 · 100/sec</option>
 </select>
 <button id="setAuto">Set Auto Clicker Level</button>
@@ -255,14 +258,14 @@ textarea{min-height:100px;overflow-wrap:anywhere}
 <input id="adminRebirths" type="number" value="10">
 <button id="giveRebirths">Grant Rebirths + Tokens</button>
 <button id="giveToken">Grant 1 Token</button>
-<p class="muted">This client-side admin panel is not secure authentication for a public multiplayer game.</p>
+<p class="muted">This is a local demo admin panel, not secure authentication for a public multiplayer game.</p>
 </div>
 </section>
 
 <section class="section" id="save">
 <div class="panel">
 <h2>💾 Save Your Game</h2>
-<p class="muted">Progress automatically saves in this browser. You can also copy a portable save code.</p>
+<p class="muted">Progress automatically saves in this browser. Portable save codes let you move progress manually.</p>
 <button id="generateSave">Generate Save Code</button>
 <textarea id="saveCode" placeholder="Your save code appears here"></textarea>
 <button id="copySave" class="secondary">Copy Save Code</button>
@@ -279,7 +282,7 @@ textarea{min-height:100px;overflow-wrap:anywhere}
 (()=>{
 'use strict';
 
-const SAVE_KEY='robloxClickerUltimate_v2';
+const SAVE_KEY='robloxClickerUltimate_v3';
 
 const worlds=[
 {name:'Starter World',emoji:'🌳',cost:0,char:'🟨',color:'#236547'},
@@ -304,7 +307,7 @@ const petTypes=[
 
 const defaultState=()=>({
 coins:0,power:1,rebirths:0,tokens:0,world:0,unlocked:[0],
-pets:[],upgradeLevel:0,rebirthUpgrade:0,autoLevel:0,
+pets:[],upgradeLevel:0,rebirthUpgrade:0,autoLevel:0,autoEnabled:true,
 bossHP:1000,bossLevel:1,bossWins:0,ownerBossHP:1000000000,
 ownerBossWins:0,secretFinds:0,totalClicks:0
 });
@@ -330,7 +333,7 @@ function addCoins(n){if(Number.isFinite(n)&&n>0)s.coins+=n}
 function render(){
  $('coins').textContent=fmt(s.coins);
  $('clickPower').textContent=fmt(clickGain());
- $('autoSpeed').textContent=autoSpeed();
+ $('autoSpeed').textContent=s.autoEnabled?autoSpeed():0;
  $('rebirthStats').textContent=`${s.rebirths} / ${s.tokens}`;
 
  $('arena').style.background=worlds[s.world].color;
@@ -350,19 +353,26 @@ function render(){
 
  $('autoDescription').textContent=s.autoLevel===0
  ?'Buy the starter bot for 5,000 coins.'
- :`Auto Clicker Level ${s.autoLevel} runs at ${autoSpeed()} clicks per second.`;
+ :`Auto Clicker Level ${s.autoLevel}: ${s.autoEnabled?'RUNNING':'PAUSED'} at ${autoSpeed()} clicks per second when enabled.`;
 
  $('buyAuto').hidden=s.autoLevel>0;
  $('buyAuto').disabled=s.coins<5000;
- $('claimAuto').hidden=s.autoLevel===0;
+ $('toggleAuto').hidden=s.autoLevel===0;
+ $('toggleAuto').textContent=s.autoEnabled?'⏸️ Turn Auto Clicker OFF':'▶️ Turn Auto Clicker ON';
+ $('toggleAuto').className=s.autoEnabled?'gold':'green';
  $('upgradeAuto').hidden=s.autoLevel===0||s.autoLevel===4;
- $('autoEstimate').textContent=s.autoLevel?`Approx. ${fmt(autoSpeed()*clickGain())} coins per second`:'';
+ $('autoEstimate').textContent=s.autoLevel
+ ?`${s.autoEnabled?'Earning':'Paused'}: approximately ${fmt(autoSpeed()*clickGain())} coins per second`
+ :'';
+
  $('autoNext').textContent=s.autoLevel>0&&s.autoLevel<4
  ?`Next level: ${[0,10,25,50,100][s.autoLevel+1]} clicks/sec · ${fmt(autoCostFor(s.autoLevel+1))} coins`
  :s.autoLevel===4?'Maximum speed reached!':'';
- $('upgradeAuto').textContent=s.autoLevel<4?`Upgrade Auto Clicker · ${fmt(autoCostFor(s.autoLevel+1))} coins`:'MAX LEVEL';
+
+ $('upgradeAuto').textContent=s.autoLevel<4
+ ?`Upgrade Auto Clicker · ${fmt(autoCostFor(s.autoLevel+1))} coins`
+ :'MAX LEVEL';
  $('upgradeAuto').disabled=s.autoLevel<4&&s.coins<autoCostFor(s.autoLevel+1);
- $('claimAuto').textContent=`Claim 10 Seconds (${fmt(autoSpeed()*clickGain()*10)} coins)`;
 
  $('rebirthCost').textContent=fmt(rebirthCost());
  $('rebirthInfo').textContent=`Rebirths: ${s.rebirths} · Tokens: ${s.tokens} · Token upgrades: ${s.rebirthUpgrade}`;
@@ -403,22 +413,17 @@ function renderPets(){
  s.pets.forEach(p=>{
   const div=document.createElement('div');
   div.className='panel pet';
-
   const emoji=document.createElement('span');
   emoji.className='petemoji';
   emoji.textContent=p.emoji;
-
   const info=document.createElement('div');
   info.style.flex='1';
-
   const name=document.createElement('b');
   name.textContent=p.name;
   name.className='rarity-'+p.rarity;
-
   const detail=document.createElement('div');
   detail.className='muted';
   detail.textContent=`${p.rarity} · x${p.mult} multiplier`;
-
   info.append(name,detail);
   div.append(emoji,info);
   box.append(div);
@@ -432,16 +437,13 @@ function renderWorlds(){
  worlds.forEach((w,i)=>{
   const div=document.createElement('div');
   div.className='panel row';
-
   const info=document.createElement('div');
   const name=document.createElement('b');
   name.textContent=`${w.emoji} ${w.name}`;
-
   const cost=document.createElement('div');
   cost.className='muted';
   cost.textContent=i===0?'Free':`${fmt(w.cost)} coins`;
   info.append(name,cost);
-
   const btn=document.createElement('button');
 
   if(s.unlocked.includes(i)){
@@ -464,7 +466,6 @@ function renderWorlds(){
     render();
    };
   }
-
   div.append(info,btn);
   box.append(div);
  });
@@ -500,7 +501,6 @@ function hatch(){
 
  const roll=Math.random()*100;
  let p;
-
  if(roll<1)p=petTypes.find(x=>x.rarity==='Secret');
  else if(roll<7)p=petTypes.find(x=>x.rarity==='Legendary');
  else if(roll<20)p=petTypes.find(x=>x.rarity==='Epic');
@@ -515,34 +515,29 @@ function hatch(){
 
 function gamble(){
  if(!s.pets.length)return;
-
  const i=Number($('gamblePet').value);
  if(!Number.isInteger(i)||!s.pets[i])return;
 
- $('slotMachine').textContent='🎰 ✨ 🎰';
  $('gambleButton').disabled=true;
+ $('slotMachine').textContent='🎰 ✨ 🎰';
 
  setTimeout(()=>{
   const roll=Math.random()*100;
   let result='';
 
-  // Probabilities total exactly 100%.
   if(roll<5){
    s.pets.splice(i,1);
-   const p=petTypes.find(p=>p.name==='Owner Pet');
-   s.pets.push({...p,id:Date.now()+Math.random()});
+   s.pets.push({...petTypes.find(p=>p.name==='Owner Pet'),id:Date.now()+Math.random()});
    result='👑 OWNER JACKPOT! You won an Owner Pet with x100 multiplier!';
    $('slotMachine').textContent='👑 👑 👑';
   }else if(roll<20){
    s.pets.splice(i,1);
-   const p=petTypes.find(p=>p.name==='Admin Pet');
-   s.pets.push({...p,id:Date.now()+Math.random()});
+   s.pets.push({...petTypes.find(p=>p.name==='Admin Pet'),id:Date.now()+Math.random()});
    result='🛠️ ADMIN JACKPOT! You won an Admin Pet with x50 multiplier!';
    $('slotMachine').textContent='🛠️ 🛠️ 🛠️';
   }else if(roll<55){
    s.pets.splice(i,1);
-   const p=petTypes.find(p=>p.name==='Royal Pet');
-   s.pets.push({...p,id:Date.now()+Math.random()});
+   s.pets.push({...petTypes.find(p=>p.name==='Royal Pet'),id:Date.now()+Math.random()});
    result='🐲 ROYAL WIN! You won a Royal Pet with x10 multiplier!';
    $('slotMachine').textContent='🐲 ✨ 🐲';
   }else{
@@ -558,8 +553,7 @@ function gamble(){
 }
 
 function attackBoss(){
- const damage=clickGain();
- s.bossHP-=damage;
+ s.bossHP-=clickGain();
 
  if(s.bossHP<=0){
   const reward=500*s.bossLevel;
@@ -569,29 +563,28 @@ function attackBoss(){
   s.bossHP=1000*s.bossLevel;
   notify(`🏆 Boss defeated! +${fmt(reward)} coins!`);
  }else{
-  notify(`💥 Dealt ${fmt(damage)} damage!`);
+  notify('💥 Boss hit for '+fmt(clickGain())+' damage!');
  }
-
  render();
 }
 
 function ownerSmash(){
  if(!adminOpen||s.ownerBossHP<=0)return;
-
  s.ownerBossHP=0;
  s.ownerBossWins++;
  s.coins+=1000000;
  s.pets.push({...petTypes.find(p=>p.name==='Owner Pet'),id:Date.now()+Math.random()});
-
  notify('👑 Owner Boss defeated! +1,000,000 coins and an Owner Pet!');
  render();
 }
 
+/* AUTO CLICKER: the level and ON/OFF setting are separate. */
 function updateAutoTimer(){
  if(autoTimer){clearInterval(autoTimer);autoTimer=null}
- if(s.autoLevel>0){
+
+ if(s.autoLevel>0&&s.autoEnabled){
   autoTimer=setInterval(()=>{
-   if(s.autoLevel<=0)return;
+   if(s.autoLevel<=0||!s.autoEnabled)return;
    s.coins+=clickGain();
    s.totalClicks++;
 
@@ -600,7 +593,6 @@ function updateAutoTimer(){
     s.secretFinds++;
     notify('✨ Infinite secret found! +50,000 coins!');
    }
-
    render();
   },1000/autoSpeed());
  }
@@ -626,11 +618,10 @@ $('clickCharacter').onclick=()=>{
  if(s.world===5&&Math.random()<.015){
   s.coins+=50000;
   s.secretFinds++;
-  notify(`✨ INFINITE SECRET FOUND! +50,000 bonus coins!`);
+  notify('✨ INFINITE SECRET FOUND! +50,000 bonus coins!');
  }else{
   notify(`+${fmt(gain)} coins!`);
  }
-
  render();
 };
 
@@ -656,8 +647,17 @@ $('buyAuto').onclick=()=>{
  if(s.coins<5000||s.autoLevel!==0)return;
  s.coins-=5000;
  s.autoLevel=1;
- notify('⚡ Auto Clicker unlocked!');
+ s.autoEnabled=true;
+ notify('⚡ Auto Clicker unlocked at 10 clicks per second!');
  updateAutoTimer();
+ render();
+};
+
+$('toggleAuto').onclick=()=>{
+ if(s.autoLevel===0)return;
+ s.autoEnabled=!s.autoEnabled;
+ updateAutoTimer();
+ notify(s.autoEnabled?'▶️ Auto Clicker turned ON!':'⏸️ Auto Clicker turned OFF!');
  render();
 };
 
@@ -669,15 +669,6 @@ $('upgradeAuto').onclick=()=>{
  s.autoLevel++;
  notify(`Auto Clicker upgraded to ${autoSpeed()} clicks/sec!`);
  updateAutoTimer();
- render();
-};
-
-$('claimAuto').onclick=()=>{
- if(s.autoLevel<=0)return;
- const gain=autoSpeed()*clickGain()*10;
- s.coins+=gain;
- s.totalClicks+=autoSpeed()*10;
- notify(`Collected ${fmt(gain)} bonus auto-click coins!`);
  render();
 };
 
@@ -751,8 +742,7 @@ $('setPower').onclick=()=>{
 
 $('givePet').onclick=()=>{
  if(!adminOpen)return;
- const rarity=$('adminPet').value;
- const p=petTypes.find(p=>p.rarity===rarity);
+ const p=petTypes.find(p=>p.rarity===$('adminPet').value);
  if(!p){notify('Pet not found.');return}
  s.pets.push({...p,id:Date.now()+Math.random()});
  notify('Admin granted '+p.name+'!');
@@ -788,8 +778,10 @@ $('adminDefeatBoss').onclick=ownerSmash;
 $('setAuto').onclick=()=>{
  if(!adminOpen)return;
  s.autoLevel=Number($('adminAuto').value);
+ if(s.autoLevel===0)s.autoEnabled=false;
+ else s.autoEnabled=true;
  updateAutoTimer();
- notify('Auto Clicker level set to '+s.autoLevel+'.');
+ notify(s.autoLevel===0?'Auto Clicker removed.':'Auto Clicker level set to '+s.autoLevel+'.');
  render();
 };
 
@@ -836,15 +828,16 @@ $('loadSave').onclick=()=>{
   ];
 
   if(!d||!Array.isArray(d.unlocked)||!Array.isArray(d.pets)||
-    !nums.every(Number.isFinite)||d.coins<0||d.power<1||
-    d.rebirths<0||d.tokens<0||d.world<0||d.world>=worlds.length||
-    d.autoLevel<0||d.autoLevel>4||!d.unlocked.includes(0)||
-    !d.unlocked.includes(d.world)||
-    d.unlocked.some(i=>!Number.isInteger(i)||i<0||i>=worlds.length)||
-    d.pets.some(p=>!petTypes.some(t=>t.name===p.name&&t.mult===p.mult&&t.rarity===p.rarity&&t.emoji===p.emoji))
+   !nums.every(Number.isFinite)||d.coins<0||d.power<1||
+   d.rebirths<0||d.tokens<0||d.world<0||d.world>=worlds.length||
+   d.autoLevel<0||d.autoLevel>4||!d.unlocked.includes(0)||
+   !d.unlocked.includes(d.world)||
+   d.unlocked.some(i=>!Number.isInteger(i)||i<0||i>=worlds.length)||
+   d.pets.some(p=>!petTypes.some(t=>t.name===p.name&&t.mult===p.mult&&t.rarity===p.rarity&&t.emoji===p.emoji))
   )throw Error('Invalid save');
 
   s={...defaultState(),...d};
+  if(typeof s.autoEnabled!=='boolean')s.autoEnabled=true;
   adminOpen=false;
   updateAutoTimer();
   notify('Save loaded successfully!');
@@ -859,9 +852,10 @@ try{
  if(saved){
   const d=JSON.parse(saved);
   if(d&&Array.isArray(d.unlocked)&&Array.isArray(d.pets)&&
-     Number.isFinite(d.coins)&&Number.isFinite(d.world)&&
-     d.world>=0&&d.world<worlds.length){
+   Number.isFinite(d.coins)&&Number.isFinite(d.world)&&
+   d.world>=0&&d.world<worlds.length){
    s={...defaultState(),...d};
+   if(typeof s.autoEnabled!=='boolean')s.autoEnabled=true;
   }
  }
 }catch(e){}
