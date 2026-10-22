@@ -3,291 +3,410 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Halloween Clicker Simulator</title>
 <style>
+:root{--bg:#10091f;--panel:#211337;--purple:#a855f7;--orange:#ff8c24;--text:#fff4ff;--muted:#c4b1d7}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at top,#582080,#160820 60%,#08040d);color:#fff;font-family:Arial,sans-serif}
-header{text-align:center;padding:20px;background:linear-gradient(120deg,#210a35,#681e9b,#220932);border-bottom:3px solid #ff921c}
-h1{font-size:clamp(28px,5vw,55px);color:#ff9d19;text-shadow:0 0 15px #ff4b00;margin:0}
-header h2{color:#e4a5ff;margin:0}
-.layout{display:grid;grid-template-columns:155px minmax(0,1fr);gap:10px;padding:10px;max-width:1500px;margin:auto}
-.stats{display:flex;flex-direction:column;gap:8px}
-.stat,.panel,.item{background:linear-gradient(145deg,#211033,#0e0818);border:1px solid #9437df;border-radius:12px;padding:11px;box-shadow:0 0 10px #9b27ff22}
-.stat span{display:block;color:#edb9ff;font-size:13px}
-.stat strong{display:block;color:#ffb52e;font-size:20px;overflow-wrap:anywhere}
-nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-button,input,select{font:inherit;padding:9px;border:1px solid #9844df;border-radius:8px}
-button{background:linear-gradient(#a72dff,#620ac0);color:white;font-weight:bold;cursor:pointer}
+body{margin:0;background:radial-gradient(ellipse at top,#382052,#10091f 60%,#05030b);color:var(--text);font-family:Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{background:linear-gradient(135deg,#8739c8,#572081);border:1px solid #b16cf2;color:white;border-radius:10px;padding:10px 13px;font-weight:bold;cursor:pointer;margin:3px}
 button:hover{filter:brightness(1.2)}
 button:disabled{opacity:.45;cursor:not-allowed}
-input,select{background:#0c0713;color:white;max-width:100%;width:100%;margin:4px 0}
-nav button{flex:1 0 auto;font-size:12px;background:#190d29}
-nav button.active{border:2px solid #ff9d22}
-.dashboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;align-items:start}
-.panel{min-width:0;margin-bottom:9px}
-.panel h3{color:#ff9c24;margin:0 0 9px}
-.panel p{font-size:13px;color:#e7d5f4}
-.full{grid-column:1/-1}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.item{padding:9px;box-shadow:none;overflow-wrap:anywhere}
-.item h4{color:#ffbf50;margin:4px 0}
-.item button{width:100%;margin-top:5px}
-.cardgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-.petcard{background:#10091b;border:1px solid #7330a5;border-radius:9px;padding:8px 4px;text-align:center;min-width:0}
-.petcard b,.petcard small{display:block;overflow-wrap:anywhere}
-.petcard small{font-size:11px;color:#e0c9f2;margin:3px 0}
-.petemoji{display:block;font-size:33px}
-.petcard button{width:100%;padding:6px 2px;background:linear-gradient(#15e85c,#008d30);border-color:#64ff91;font-size:12px}
-.owner{border-color:#ffb82e;box-shadow:inset 0 0 10px #ffb82e33}
-.fattini{border-color:#18ff76;box-shadow:inset 0 0 10px #18ff7633}
-.secret{border-color:#b64bff}
-.green{background:linear-gradient(#16e65b,#008c30)}
-.red{background:linear-gradient(#f33b56,#a40026)}
-.orange{background:linear-gradient(#ffb32e,#e55b00);color:#281000}
-.bigclick{width:100%;padding:22px;font-size:26px;background:linear-gradient(135deg,#ffad19,#ec4200,#9322ff);border:2px solid #ffcf69;margin:8px 0}
-.result{padding:10px;background:#090511;border:1px solid #8f36da;border-radius:8px;margin-top:8px;overflow-wrap:anywhere}
-.bar{height:12px;background:#090511;border-radius:20px;overflow:hidden}
-.bar div{height:100%;background:linear-gradient(90deg,#ff831c,#ffe050)}
-.section{display:none}.section.active{display:block}
-.muted{font-size:11px;color:#c5a4d9}
-#notice{min-height:23px;text-align:center;color:#ffd06a;padding:5px;font-size:13px}
-.wheel{text-align:center;font-size:75px}
-footer{text-align:center;color:#c4a5d9;padding:20px;font-size:12px}
-@media(max-width:850px){.layout{grid-template-columns:1fr}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.dashboard{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard{grid-template-columns:1fr}.full{grid-column:auto}nav button{flex:1 0 27%;font-size:11px;padding:8px}.panel{padding:9px}}
+input,select,textarea{width:100%;padding:10px;background:#140b23;color:white;border:1px solid #694188;border-radius:8px;margin:5px 0}
+header{text-align:center;padding:20px 10px;background:#160b24;border-bottom:2px solid #6a3090}
+h1{color:#ff9b36;text-shadow:0 0 18px #f80}
+h2{color:#e4b4ff}
+.layout{display:grid;grid-template-columns:205px minmax(0,1fr);gap:14px;max-width:1400px;margin:auto;padding:14px}
+.sidebar,.panel,.stat{background:linear-gradient(145deg,#291741,#190e29);border:1px solid #54346e;border-radius:14px}
+.sidebar{padding:9px;height:max-content;position:sticky;top:8px}
+.sidebar button{width:100%;text-align:left;background:#261338;border-color:#4b2c65;margin:3px 0}
+.sidebar button.active{background:linear-gradient(120deg,#8b36ca,#c45d19)}
+main{min-width:0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.stat{text-align:center;padding:12px;min-width:0}
+.label{font-size:12px;color:var(--muted)}
+.value{font-size:clamp(16px,2.5vw,24px);font-weight:bold;color:#ffb55f;overflow-wrap:anywhere}
+.panel{padding:16px;margin-bottom:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}
+.item{padding:12px;border:1px solid #55366d;background:#160d25;border-radius:11px;min-width:0}
+.item p{font-size:13px;line-height:1.5;color:var(--muted)}
+.item button{width:100%}
+.center{text-align:center}
+.bigcoin{display:block;width:190px;height:190px;max-width:65vw;max-height:65vw;margin:18px auto;border-radius:50%;font-size:76px;background:radial-gradient(circle at 35% 25%,#fff09b,#ff9b19 45%,#b84b00);border:8px solid #ffbd55;box-shadow:0 0 28px #ff851b88}
+.hidden{display:none!important}
+.notice{background:#2d1b3d;padding:10px;border-radius:8px;margin-top:10px;color:#ffe2a8;overflow-wrap:anywhere}
+.pill{display:inline-block;background:#44235c;border-radius:20px;padding:5px 9px;font-size:12px;margin:3px}
+.progress{height:14px;background:#0c0713;border-radius:10px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#a855f7,#ff9c30)}
+.muted{color:var(--muted)}
+.boss-arena{background:radial-gradient(circle at center,#371c57,#0a0614 70%);border:2px solid #7e36b6;border-radius:16px;padding:18px;text-align:center}
+.boss-art{font-size:clamp(65px,15vw,120px);filter:drop-shadow(0 0 16px #a855f7)}
+.boss-hp{font-size:clamp(16px,3vw,25px);font-weight:bold;color:#ff9eae;overflow-wrap:anywhere}
+.boss-btn{background:linear-gradient(135deg,#4c1b85,#1b082e);border-color:#c084fc}
+.reward{font-size:18px;color:#ffd28a}
+footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
+@media(max-width:700px){
+.layout{grid-template-columns:1fr;padding:8px}
+.sidebar{position:static;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.sidebar button{text-align:center;font-size:11px;padding:9px 3px;margin:0}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.panel{padding:12px}
+}
 </style>
 </head>
 <body>
 <header>
-<h1>🎃 HALLOWEEN 🎃</h1>
-<h2>CLICKER SIMULATOR</h2>
-<p>🦇 Spooky Pets • Haunted Worlds • Legendary Rewards 👻</p>
+<h1>🎃 HALLOWEEN CLICKER SIMULATOR 👻</h1>
+<p>Collect candy, collect pets, defeat bosses, and explore the Black Hole!</p>
 </header>
-<div class="layout">
-<aside class="stats">
-<div class="stat">🪙 Coins<strong id="coins">0</strong></div>
-<div class="stat">💎 Gems<strong id="gems">0</strong></div>
-<div class="stat">🍬 Candy<strong id="candy">0</strong></div>
-<div class="stat">🔮 Tokens<strong id="tokens">0</strong></div>
-<div class="stat">👆 Power<strong id="power">1</strong></div>
-<div class="stat">✨ Multiplier<strong id="mult">x1</strong></div>
-<div class="stat">🔄 Rebirths<strong id="rebirths">0</strong></div>
-</aside>
-<div>
-<nav>
-<button class="active" onclick="tab('home',this)">🏠 Home</button>
-<button onclick="tab('pets',this)">🐾 Pets</button>
-<button onclick="tab('worlds',this)">🌐 Worlds</button>
-<button onclick="tab('boss',this)">👹 Bosses</button>
-<button onclick="tab('fusion',this)">🧬 Fusion</button>
-<button onclick="tab('daily',this)">🎁 Daily</button>
-<button onclick="tab('achievements',this)">🏆 Achievements</button>
-<button onclick="tab('skins',this)">👕 Skins</button>
-<button onclick="tab('wheel',this)">🎡 Wheel</button>
-<button onclick="tab('collection',this)">📖 Collection</button>
-<button onclick="tab('gambler',this)">🎲 Gambler</button>
-<button onclick="tab('codes',this)">🎟️ Codes</button>
-<button onclick="tab('admin',this)">👑 Admin</button>
-</nav>
-<div id="notice"></div>
 
-<section id="home" class="section active">
-<div class="panel">
-<h3>🎃 Pumpkin Clicker</h3>
-<button class="bigclick" onclick="clickCoin()">🎃 CLICK FOR COINS 🎃</button>
-<p id="clickInfo"></p>
+<div class="layout">
+<nav class="sidebar" id="nav">
+<button class="active" data-page="home">🎃 Home</button>
+<button data-page="upgrades">⚡ Upgrades</button>
+<button data-page="auto">🤖 Auto Clickers</button>
+<button data-page="pets">🐾 Pets</button>
+<button data-page="worlds">🌎 Worlds</button>
+<button data-page="boss">👹 Halloween Boss</button>
+<button data-page="blackhole">🌌 Black Hole</button>
+<button data-page="fusion">🧪 Pet Fusion</button>
+<button data-page="daily">🎁 Daily Rewards</button>
+<button data-page="achievements">🏆 Achievements</button>
+<button data-page="skins">🎨 Skins</button>
+<button data-page="wheel">🎡 Lucky Wheel</button>
+<button data-page="collection">📖 Collection</button>
+<button data-page="gambler">🎰 Gambler</button>
+<button data-page="codes">🎟️ Codes</button>
+<button data-page="admin">🔒 Admin Panel</button>
+<button data-page="save">💾 Save / Load</button>
+</nav>
+
+<main>
+<div class="stats">
+<div class="stat"><div class="label">🍬 CANDY</div><div class="value" id="coins">0</div></div>
+<div class="stat"><div class="label">💎 GEMS</div><div class="value" id="gems">0</div></div>
+<div class="stat"><div class="label">🔄 REBIRTHS</div><div class="value" id="rebirths">0</div></div>
+<div class="stat"><div class="label">⚡ CLICK POWER</div><div class="value" id="power">1</div></div>
+</div>
+
+<section class="page" id="page-home">
+<div class="panel center">
+<h2>🎃 Halloween Candy Clicker</h2>
+<p>Click the pumpkin to collect candy. Buy upgrades and pets to increase your power.</p>
+<div><span class="pill" id="worldLabel">🎃 Haunted Town</span><span class="pill" id="equippedLabel">No pet equipped</span></div>
+<button class="bigcoin" id="clickButton">🎃</button>
+<h2 id="clickMessage">Ready to collect candy?</h2>
+<p id="multiplierText">Total multiplier: ×1</p>
 <div class="grid">
-<div class="item"><h4>⚡ Click Upgrade</h4><p>Cost: <b id="upgradeCost"></b></p><button onclick="buyUpgrade()">Upgrade</button></div>
-<div class="item"><h4>🔥 Super Clicker</h4><p>Cost: <b id="superCost"></b></p><button onclick="buySuper()">Buy Super</button></div>
-<div class="item"><h4>🤖 Auto Clicker</h4><p id="autoInfo"></p><p>Cost: <b id="autoCost"></b></p><button onclick="buyAuto()">Upgrade Auto</button><button onclick="toggleAuto()" id="autoToggle">Auto: ON</button></div>
-<div class="item"><h4>🔄 Rebirth</h4><p>Need <b id="rebirthNeed"></b> coins.</p><button onclick="rebirth()">Rebirth</button></div>
-<div class="item"><h4>🔮 Token Upgrade</h4><p>Permanent multiplier bonus.</p><button onclick="buyTokenUpgrade()">Spend Token</button></div>
-<div class="item"><h4>💾 Save Code</h4><button onclick="exportSave()">Export Save</button><input id="saveCode" placeholder="Paste save code"><button onclick="importSave()">Import Save</button></div>
+<div class="item"><h3>⚡ Quick Upgrade</h3><p>Increase base click power.</p><button onclick="buyUpgrade(0)">Upgrade · <span id="quickCost">25</span> candy</button></div>
+<div class="item"><h3>🔄 Rebirth</h3><p>Reset your candy and upgrades for permanent power.</p><button onclick="rebirth()">Rebirth · <span id="rebirthCost">10000</span></button></div>
 </div>
 </div>
-<div class="dashboard">
-<div class="panel"><h3>🐾 Best Pet</h3><div id="bestPet">No pets yet</div><button onclick="tab('pets')">Pet Shop</button></div>
-<div class="panel"><h3>🌍 Current World</h3><h2 id="worldName">Starter</h2><button onclick="tab('worlds')">Travel</button></div>
-<div class="panel"><h3>👹 Boss</h3><h4 id="bossName"></h4><p>HP <b id="bossHP"></b> / <span id="bossMax"></span></p><div class="bar"><div id="bossBar" style="width:100%"></div></div><button onclick="attackBoss()">⚔️ Attack</button></div>
+<div class="panel"><h2>📊 Progress</h2><div id="levelText">Level 1</div><div class="progress"><div id="levelBar"></div></div><div id="levelProgress" class="muted">0 / 100 XP</div><p id="achievementSummary"></p></div>
+</section>
+
+<section class="page hidden" id="page-upgrades">
+<div class="panel"><h2>⚡ Upgrades</h2><div class="grid" id="upgradeList"></div></div>
+<div class="panel"><h2>🔮 Rebirth Token Upgrades</h2><p>Earn tokens by rebirthing.</p><div class="grid" id="tokenUpgradeList"></div></div>
+</section>
+
+<section class="page hidden" id="page-auto">
+<div class="panel"><h2>🤖 Auto Clickers</h2><p>Unlock higher levels to earn candy automatically.</p><div class="grid" id="autoList"></div><div class="notice" id="autoStatus"></div></div>
+</section>
+
+<section class="page hidden" id="page-pets">
+<div class="panel"><h2>🐾 Pet Shop</h2><p>Equip one pet at a time to multiply your candy earnings. You can own multiple copies.</p><div class="grid" id="petList"></div><div class="notice">👑 Owner Pet is obtainable through the New Update code or the Black Hole victory reward. It cannot be given by the Admin Panel or Gambler Machine.</div></div>
+</section>
+
+<section class="page hidden" id="page-worlds">
+<div class="panel"><h2>🌎 Worlds</h2><div class="grid" id="worldList"></div><div class="notice">The Black Hole has its own separate boss arena. Use the Black Hole tab to travel there.</div></div>
+</section>
+
+<section class="page hidden" id="page-boss">
+<div class="panel"><h2>👹 Halloween Boss Battle</h2><div class="boss-arena"><div class="boss-art" id="bossArt">👹</div><h2 id="bossName">Pumpkin King</h2><div class="boss-hp" id="bossHealthText"></div><div class="progress"><div id="bossBar"></div></div><button onclick="attackHalloweenBoss()">⚔️ Attack Boss</button><button onclick="healHalloweenBoss()">🧪 Heal · 100 candy</button><div class="notice" id="bossMessage">Defeat bosses to earn gems and candy!</div></div></div>
+</section>
+
+<section class="page hidden" id="page-blackhole">
+<div class="panel center">
+<h2>🌌 BLACK HOLE WORLD</h2>
+<p>A mysterious black hole takes you to a distant arena where extremely powerful bosses await.</p>
+<div style="font-size:clamp(70px,18vw,150px);filter:drop-shadow(0 0 25px #a855f7)">🌀</div>
+<button onclick="teleportBlackHole()" style="font-size:17px;padding:14px 22px">🌌 TELEPORT TO BLACK HOLE</button>
+<div class="notice" id="blackHoleMessage">Enter the arena to fight the Demon Boss. Owners can also challenge the Owner Boss after unlocking the Admin Panel.</div>
+<div id="blackHoleArena" class="boss-arena hidden">
+<div class="boss-art" id="bhArt">😈</div>
+<h2 id="bhName">Black Hole Demon</h2>
+<div class="pill" id="bhType">DEMON BOSS</div>
+<p id="bhDescription">A demon from beyond the universe.</p>
+<div class="boss-hp" id="bhHP"></div>
+<div class="progress"><div id="bhBar"></div></div>
+<p id="bhDamageText">Boss damage: 500 Qa</p>
+<div id="bhOwnerControls" class="hidden">
+<button class="boss-btn" onclick="startOwnerBoss()">👑 Challenge Owner Boss</button>
+</div>
+<button class="boss-btn" id="bhAttackButton" onclick="attackBlackHoleBoss()">⚔️ ATTACK BOSS</button>
+<div class="notice" id="bhMessage">Defeat the boss to roll for victory rewards!</div>
+<div id="bhReward" class="reward"></div>
+</div>
 </div>
 </section>
 
-<section id="pets" class="section"><div class="dashboard">
-<div class="panel"><h3>🎃 Pet Shop</h3><div id="petShop" class="cardgrid"></div></div>
-<div class="panel"><h3>🐾 Your Pets</h3><div id="petList"></div><button class="green" onclick="equipBest()">Sort Best Pets</button></div>
-<div class="panel"><h3>🎲 Gambler Machine</h3><p>Wager a pet. Each spin consumes the wager.</p><select id="gamblerPet"></select><button class="bigclick" onclick="gamble()">🎲 SPIN</button><p>Fattini 2% • Admin 15% • Royal 35% • Lose 48%</p><div id="gambleResult" class="result">Choose a pet!</div></div>
-</div></section>
+<section class="page hidden" id="page-fusion">
+<div class="panel"><h2>🧪 Pet Fusion</h2><p>Combine three copies of a pet into one stronger pet. Each fusion doubles its multiplier.</p><label for="fusionPet">Choose a pet</label><select id="fusionPet"></select><button onclick="fusePets()">Fuse 3 Pets</button><div class="notice" id="fusionMessage">You need three copies of a pet to fuse.</div></div>
+</section>
 
-<section id="worlds" class="section"><div class="panel"><h3>🌐 World Portal</h3><div id="worldList" class="grid"></div></div></section>
-<section id="boss" class="section"><div class="panel"><h3>👹 Boss Battle</h3><h2 id="bossName2"></h2><p>HP <b id="bossHP2"></b> / <span id="bossMax2"></span></p><div class="bar"><div id="bossBar2"></div></div><button onclick="attackBoss()">⚔️ Attack</button><button onclick="newBoss()">Next Boss</button></div></section>
-<section id="fusion" class="section"><div class="panel"><h3>🧬 Pet Fusion</h3><p>Combine five pets of the same rarity. Special pets cannot be fused.</p><div id="fusionList" class="grid"></div></div></section>
-<section id="daily" class="section"><div class="panel"><h3>🎁 Daily Rewards</h3><h2>🔥 Streak: <span id="streak">0</span></h2><p id="dailyReward"></p><button id="dailyButton" onclick="claimDaily()">Claim Reward</button></div></section>
-<section id="achievements" class="section"><div class="panel"><h3>🏆 Achievements</h3><div id="achievementList" class="grid"></div></div></section>
-<section id="skins" class="section"><div class="panel"><h3>👕 Character Skins</h3><div id="skinList" class="grid"></div></div></section>
-<section id="wheel" class="section"><div class="panel"><h3>🎡 Lucky Wheel</h3><div class="wheel">🎃🎡👻</div><button onclick="spinWheel()" id="spinButton">Spin Wheel</button><div id="wheelResult" class="result"></div></div></section>
-<section id="collection" class="section"><div class="panel"><h3>📖 Pet Collection</h3><p>Discovered <b id="collectionCount"></b> / <span id="collectionTotal"></span></p><div id="collectionList" class="grid"></div></div></section>
-<section id="gambler" class="section"><div class="panel"><h3>🎲 Gambler Machine</h3><select id="gamblerPet2"></select><button onclick="gamble()">SPIN</button><div id="gambleResult2" class="result"></div></div></section>
-<section id="codes" class="section"><div class="panel"><h3>🎟️ Secret Codes</h3><div class="item"><h4>⭐ Owner Pet Code</h4><p>Enter the code to receive Owner Pet ×1 billion. This is the only in-game method to obtain it.</p><input id="ownerPetCode" placeholder="Enter secret code"><button onclick="redeemOwnerPetCode()">Redeem Code</button></div></div></section>
+<section class="page hidden" id="page-daily">
+<div class="panel center"><h2>🎁 Daily Rewards</h2><div style="font-size:70px">🎁</div><p id="dailyText">Claim your daily reward!</p><button id="dailyButton" onclick="claimDaily()">Claim Reward</button><div class="notice" id="dailyMessage"></div></div>
+</section>
 
-<section id="admin" class="section"><div class="panel"><h3>👑 Admin Panel</h3><input id="adminCode" type="password" placeholder="Admin code"><button onclick="loginAdmin()">Unlock Admin</button>
-<div id="adminTools" style="display:none"><div class="dashboard">
-<div class="item"><h4>🪙 Give Coins</h4><input id="adminCoins" type="number" min="0"><button onclick="adminGiveCoins()">Give</button></div>
-<div class="item"><h4>🪙 Set Coins (including 0)</h4><input id="adminSetCoinsInput" type="number" min="0"><button onclick="adminSetCoins()">Set Coins</button></div>
-<div class="item"><h4>💎 Set Gems</h4><input id="adminGems" type="number" min="0"><button onclick="adminSetGems()">Set Gems</button></div>
-<div class="item"><h4>🍬 Set Candy</h4><input id="adminCandy" type="number" min="0"><button onclick="adminSetCandy()">Set Candy</button></div>
-<div class="item"><h4>⚡ Set Click Power</h4><input id="adminPower" type="number" min="1"><button onclick="adminSetPower()">Set Power</button></div>
-<div class="item"><h4>✨ Set Multiplier</h4><input id="adminMultiplier" type="number" min="1"><button onclick="adminSetMultiplier()">Set Multiplier</button></div>
-<div class="item"><h4>🔮 Give Tokens</h4><input id="adminTokens" type="number" min="0"><button onclick="adminGiveTokens()">Give Tokens</button></div>
-<div class="item"><h4>🐾 Give Pet</h4><select id="adminPet"></select><button onclick="adminGivePet()">Give Pet</button></div>
-<div class="item"><h4>🤖 Auto Level</h4><input id="adminAuto" type="number" min="0" max="4"><button onclick="adminSetAuto()">Set Level</button></div>
-<div class="item"><h4>🌌 Unlock Worlds</h4><button onclick="adminUnlockWorlds()">Unlock Worlds</button></div>
-<div class="item"><h4>👹 Defeat Boss</h4><button onclick="adminDefeatBoss()">Defeat Boss</button></div>
-<div class="item"><h4>⚠️ Reset Save</h4><button class="red" onclick="adminReset()">Reset Save</button></div>
-</div><p class="muted">Browser-based admin controls are not secure against source inspection.</p></div>
-</div></section>
+<section class="page hidden" id="page-achievements">
+<div class="panel"><h2>🏆 Achievements</h2><div class="grid" id="achievementList"></div></div>
+</section>
+
+<section class="page hidden" id="page-skins">
+<div class="panel"><h2>🎨 Clicker Skins</h2><div class="grid" id="skinList"></div></div>
+</section>
+
+<section class="page hidden" id="page-wheel">
+<div class="panel center"><h2>🎡 Lucky Wheel</h2><div style="font-size:90px">🎡</div><p>Spin once every 24 hours.</p><button onclick="spinWheel()">Spin the Wheel!</button><div class="notice" id="wheelMessage">Candy, gems, or a lucky bonus await!</div></div>
+</section>
+
+<section class="page hidden" id="page-collection">
+<div class="panel"><h2>📖 Pet Collection</h2><p id="collectionStats"></p><div class="grid" id="collectionList"></div></div>
+</section>
+
+<section class="page hidden" id="page-gambler">
+<div class="panel center"><h2>🎰 Gambler Machine</h2><div style="font-size:75px">🎰</div><p>Cost: 500 candy. Fattini Pet has a 2% chance. Owner Pet is never a Gambler Machine reward.</p><button onclick="gamble()">Try Your Luck · 500 🍬</button><div class="notice" id="gamblerMessage">Good luck!</div></div>
+</section>
+
+<section class="page hidden" id="page-codes">
+<div class="panel"><h2>🎟️ Secret Codes</h2><p>Redeem special rewards.</p><input id="codeInput" placeholder="Enter secret code" autocomplete="off"><button onclick="redeemCode()">Redeem Code</button><div class="notice" id="codeMessage">Owner Pet code: <strong>New Update</strong></div></div>
+</section>
+
+<section class="page hidden" id="page-admin">
+<div class="panel" id="adminLogin">
+<h2>🔒 Admin Panel</h2><p>Enter the admin code.</p><input id="adminCode" type="password" placeholder="Admin code"><button onclick="loginAdmin()">Unlock Admin Panel</button><div class="notice" id="adminLoginMessage"></div>
 </div>
+<div class="panel hidden" id="adminTools">
+<h2>🛠️ Admin Controls</h2>
+<p>The Owner Pet is excluded from admin pet grants. Unlocking the panel also enables the Owner Boss challenge in the Black Hole arena.</p>
+<div class="grid">
+<div class="item"><h3>🍬 Set Candy</h3><input id="adminCoins" type="number" min="0"><button onclick="adminSet('coins','adminCoins')">Set Candy</button></div>
+<div class="item"><h3>💎 Set Gems</h3><input id="adminGems" type="number" min="0"><button onclick="adminSet('gems','adminGems')">Set Gems</button></div>
+<div class="item"><h3>⚡ Set Power</h3><input id="adminPower" type="number" min="1"><button onclick="adminSet('power','adminPower')">Set Power</button></div>
+<div class="item"><h3>✨ Extra Multiplier</h3><input id="adminMultiplier" type="number" min="1"><button onclick="adminSet('adminMultiplier','adminMultiplier')">Set Multiplier</button></div>
+<div class="item"><h3>🔄 Rebirths</h3><input id="adminRebirths" type="number" min="0"><button onclick="adminSet('rebirths','adminRebirths')">Set Rebirths</button></div>
+<div class="item"><h3>🪙 Tokens</h3><input id="adminTokens" type="number" min="0"><button onclick="adminSet('tokens','adminTokens')">Set Tokens</button></div>
+<div class="item"><h3>🐾 Give Pet</h3><select id="adminPet"></select><button onclick="adminGivePet()">Give Pet</button></div>
+<div class="item"><h3>🤖 Auto Level</h3><input id="adminAuto" type="number" min="0" max="6"><button onclick="adminSet('autoLevel','adminAuto')">Set Auto Level</button></div>
+<div class="item"><h3>🌎 Unlock Worlds</h3><button onclick="adminUnlockWorlds()">Unlock All Worlds</button></div>
+<div class="item"><h3>👹 Defeat Boss</h3><button onclick="adminDefeatBoss()">Defeat Halloween Boss</button></div>
+<div class="item"><h3>💾 Reset Save</h3><button onclick="adminReset()" style="background:#8b2020">Reset Save</button></div>
+</div><div class="notice" id="adminMessage"></div>
 </div>
-<footer>🎃 Halloween Clicker Simulator • Spooky season never ends! 🦇</footer>
+</section>
+
+<section class="page hidden" id="page-save">
+<div class="panel"><h2>💾 Save / Load</h2><p>Your progress automatically saves in this browser.</p><button onclick="saveGame(true)">Save Now</button><button onclick="exportSave()">Export Save</button><button onclick="$('importFile').click()">Import File</button><input id="importFile" type="file" accept=".json,application/json" class="hidden"><textarea id="saveText" rows="5" placeholder="Save backup text"></textarea><button onclick="importSaveText()">Import Text Backup</button><div class="notice" id="saveMessage">Auto-save enabled.</div></div>
+</section>
+</main>
+</div>
+<footer>🎃 Halloween Clicker Simulator · Local browser saving 👻</footer>
 
 <script>
 "use strict";
-const SAVE_KEY="halloweenClickerDashboard_v2";
+const SAVE_KEY="halloweenClickerDashboard_v3";
 const ADMIN_CODE="Besto Friendo";
-const pets=[
-{name:"Puppy",rarity:"Common",mult:1.2,cost:100,emoji:"🐶"},
-{name:"Kitty",rarity:"Common",mult:1.3,cost:150,emoji:"🐱"},
-{name:"Bunny",rarity:"Rare",mult:1.7,cost:500,emoji:"🐰"},
-{name:"Fox",rarity:"Epic",mult:2.5,cost:1500,emoji:"🦊"},
-{name:"Dragon",rarity:"Legendary",mult:5,cost:5000,emoji:"🐉"},
-{name:"Royal Pet",rarity:"Mythic",mult:10,cost:15000,emoji:"👑"},
-{name:"Galaxy Dominus",rarity:"Secret",mult:15,cost:50000,emoji:"🌌"},
-{name:"Admin Pet",rarity:"Admin",mult:50,cost:0,emoji:"🥷"},
-{name:"Owner Pet",rarity:"Owner",mult:1000000000,cost:0,emoji:"⭐"},
-{name:"Fattini Pet",rarity:"Special",mult:100000,cost:0,emoji:"🍝"}
-];
-const worlds=[
-{name:"Starter",emoji:"🌱",cost:0,rebirth:0},
-{name:"Desert",emoji:"🏜️",cost:5000,rebirth:0},
-{name:"Snow",emoji:"❄️",cost:25000,rebirth:1},
-{name:"Volcano",emoji:"🌋",cost:100000,rebirth:3},
-{name:"Galaxy",emoji:"🌌",cost:500000,rebirth:5},
-{name:"Secret World",emoji:"🪐",cost:2000000,rebirth:10}
-];
-const skins=[
-{name:"Classic",emoji:"🙂",cost:0},{name:"Ninja",emoji:"🥷",cost:1000},
-{name:"Robot",emoji:"🤖",cost:5000},{name:"King",emoji:"🤴",cost:25000},
-{name:"Galaxy",emoji:"👽",cost:100000}
-];
-const rarities=["Common","Rare","Epic","Legendary","Mythic","Secret"];
-const achievements=[
-{id:"click100",name:"Getting Started",desc:"Click 100 times",test:s=>s.totalClicks>=100,reward:500},
-{id:"click1000",name:"Click Champion",desc:"Click 1,000 times",test:s=>s.totalClicks>=1000,reward:5000},
-{id:"coins10k",name:"Coin Collector",desc:"Earn 10,000 coins total",test:s=>s.totalEarned>=10000,reward:1000},
-{id:"coins1m",name:"Millionaire",desc:"Earn 1,000,000 coins total",test:s=>s.totalEarned>=1000000,reward:50000},
-{id:"pets5",name:"Pet Lover",desc:"Discover 5 different pets",test:s=>s.discovered.length>=5,reward:3000},
-{id:"boss1",name:"Boss Buster",desc:"Defeat a boss",test:s=>s.bossesDefeated>=1,reward:2000},
-{id:"rebirth1",name:"Reborn",desc:"Rebirth once",test:s=>s.rebirths>=1,reward:5000},
-{id:"world5",name:"Explorer",desc:"Unlock Galaxy World",test:s=>s.worldsUnlocked.includes("Galaxy"),reward:25000}
-];
-function defaultState(){return{coins:0,gems:0,candy:0,power:1,upgradeLevel:0,superLevel:0,autoLevel:0,autoEnabled:true,rebirths:0,tokens:0,tokenUpgrades:0,totalClicks:0,totalEarned:0,petsOwned:[],discovered:[],worldsUnlocked:["Starter"],world:"Starter",bossIndex:0,bossHP:100,bossesDefeated:0,lastDaily:"",dailyStreak:0,lastWheel:"",claimedAchievements:[],ownerCodeRedeemed:false,adminMultiplier:1,skinsUnlocked:["Classic"],equippedSkin:"Classic"}}
-function load(){try{return{...defaultState(),...JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")}}catch(e){return defaultState()}}
-let s=load(),autoTimer=null,adminUnlocked=false;
-function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(s))}catch(e){notify("Save failed: storage may be full.")}}
-function fmt(n){return Math.floor(n||0).toLocaleString("en-US")}
-function notify(t){document.getElementById("notice").textContent=t}
-function tab(id,btn){document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");render()}
-function petInfo(n){return pets.find(p=>p.name===n)}
-function petMultiplier(){return s.petsOwned.reduce((a,n)=>a*(petInfo(n)?.mult||1),1)}
-function totalMultiplier(){return petMultiplier()*(1+s.rebirths*.25)*(1+s.tokenUpgrades*.5)*(s.adminMultiplier||1)}
-function clickReward(){return Math.max(1,Math.floor(s.power*totalMultiplier()))}
-function addCoins(n){n=Math.max(0,Math.floor(n));s.coins+=n;s.totalEarned+=n}
-function clickCoin(){addCoins(clickReward());s.totalClicks++;checkAchievements();save();render()}
-function buyUpgrade(){let c=Math.floor(25*1.7**s.upgradeLevel);if(s.coins<c)return notify("Not enough coins!");s.coins-=c;s.upgradeLevel++;s.power++;save();render()}
-function buySuper(){let c=Math.floor(500*2**s.superLevel);if(s.coins<c)return notify("Not enough coins!");s.coins-=c;s.superLevel++;s.power+=10;save();render()}
-function buyAuto(){let costs=[250,1500,7500,30000];if(s.autoLevel>=4)return notify("Auto Clicker maxed!");let c=costs[s.autoLevel];if(s.coins<c)return notify("Not enough coins!");s.coins-=c;s.autoLevel++;updateAutoTimer();save();render()}
-function toggleAuto(){s.autoEnabled=!s.autoEnabled;updateAutoTimer();save();render();notify("Auto Clicker "+(s.autoEnabled?"ON":"OFF"))}
-function updateAutoTimer(){if(autoTimer)clearInterval(autoTimer);autoTimer=null;if(s.autoLevel>0&&s.autoEnabled){let rates=[0,10,25,50,100];autoTimer=setInterval(()=>{addCoins(clickReward()*rates[s.autoLevel]);s.totalClicks+=rates[s.autoLevel];checkAchievements();save();render()},1000)}}
-function rebirth(){let need=Math.floor(10000*5**s.rebirths);if(s.coins<need)return notify("Need "+fmt(need)+" coins!");s.coins=0;s.power=1;s.upgradeLevel=0;s.superLevel=0;s.autoLevel=0;s.rebirths++;s.tokens++;updateAutoTimer();save();render();notify("Rebirth complete!")}
-function buyTokenUpgrade(){if(s.tokens<1)return notify("Need a token!");s.tokens--;s.tokenUpgrades++;save();render()}
-function givePet(n){if(!petInfo(n))return;s.petsOwned.push(n);if(!s.discovered.includes(n))s.discovered.push(n);checkAchievements()}
-function buyPet(n){let p=petInfo(n);if(!p||p.cost<=0)return notify("This pet is only available through special methods!");if(s.coins<p.cost)return notify("Not enough coins!");s.coins-=p.cost;givePet(n);save();render();notify("You got "+p.name+"!")}
-function releasePet(i){if(i<0||i>=s.petsOwned.length)return;s.petsOwned.splice(i,1);save();render()}
-function equipBest(){s.petsOwned.sort((a,b)=>(petInfo(b)?.mult||1)-(petInfo(a)?.mult||1));save();render()}
-function renderPets(){
-document.getElementById("petShop").innerHTML=pets.filter(p=>p.cost>0).map(p=>`<div class="petcard"><b>${p.name}</b><small>${p.rarity}</small><span class="petemoji">${p.emoji}</span><b>x${fmt(p.mult)}</b><button onclick="buyPet('${p.name}')">🪙 ${fmt(p.cost)}</button></div>`).join("");
-document.getElementById("petList").innerHTML=s.petsOwned.length?s.petsOwned.map((n,i)=>{let p=petInfo(n);return `<div class="item"><b>${p.emoji} ${n}</b><p>x${fmt(p.mult)} multiplier</p><button class="red" onclick="releasePet(${i})">Release</button></div>`}).join(""):"You have no pets yet.";
-let opts=s.petsOwned.map((n,i)=>`<option value="${i}">${petInfo(n).emoji} ${n} (x${fmt(petInfo(n).mult)})</option>`).join("");
-document.getElementById("gamblerPet").innerHTML=opts;document.getElementById("gamblerPet2").innerHTML=opts;
-document.getElementById("adminPet").innerHTML=pets.map(p=>`<option value="${p.name}">${p.emoji} ${p.name} x${fmt(p.mult)}</option>`).join("");
-let best=s.petsOwned.map(n=>petInfo(n)).sort((a,b)=>b.mult-a.mult)[0];document.getElementById("bestPet").textContent=best?best.emoji+" "+best.name+" x"+fmt(best.mult):"No pets yet";
-}
-function gamble(){
-let el=document.querySelector("#gambler.active")?document.getElementById("gamblerPet2"):document.getElementById("gamblerPet");
-let i=Number(el.value);if(!Number.isInteger(i)||i<0||i>=s.petsOwned.length)return notify("Choose a pet to wager!");
-let wager=s.petsOwned.splice(i,1)[0],r=Math.random()*100,msg;
-if(r<2){givePet("Fattini Pet");msg="🍝 You won Fattini Pet x100K!"}
-else if(r<17){givePet("Admin Pet");msg="🛡️ You won Admin Pet!"}
-else if(r<52){givePet("Royal Pet");msg="👑 You won Royal Pet!"}
-else msg="❌ You lost the wagered "+wager+".";
-document.getElementById("gambleResult").textContent=msg;document.getElementById("gambleResult2").textContent=msg;save();render();notify("Gambler Machine finished!")
-}
-function redeemOwnerPetCode(){
-let input=document.getElementById("ownerPetCode");
-if(input.value.trim()!=="New Update")return notify("Incorrect code!");
-if(s.ownerCodeRedeemed)return notify("This save already redeemed the code!");
-s.ownerCodeRedeemed=true;givePet("Owner Pet");input.value="";save();render();notify("⭐ Owner Pet x1B unlocked!")
-}
-function unlockWorld(n){let w=worlds.find(x=>x.name===n);if(!w)return;if(s.worldsUnlocked.includes(n)){s.world=n;save();render();return notify("Welcome to "+n+"!")}if(s.coins<w.cost||s.rebirths<w.rebirth)return notify("Need more coins or rebirths!");s.coins-=w.cost;s.worldsUnlocked.push(n);s.world=n;checkAchievements();save();render();notify(n+" unlocked!")}
-function renderWorlds(){document.getElementById("worldList").innerHTML=worlds.map(w=>`<div class="item"><h4>${w.emoji} ${w.name}</h4><p>${fmt(w.cost)} coins • ${w.rebirth} rebirths</p><button onclick="unlockWorld('${w.name}')">${s.worldsUnlocked.includes(w.name)?"Travel":"Unlock"}</button></div>`).join("")}
-const bossNames=["Starter Slime","Desert Golem","Ice Beast","Volcano Dragon","Galaxy Titan","Secret Overlord"];
-function bossMaxHP(){return 100*4**s.bossIndex}
-function renderBoss(){let m=bossMaxHP();s.bossHP=Math.max(1,Math.min(s.bossHP,m));["bossName","bossName2"].forEach(id=>document.getElementById(id).textContent=bossNames[s.bossIndex]);["bossHP","bossHP2"].forEach(id=>document.getElementById(id).textContent=fmt(s.bossHP));["bossMax","bossMax2"].forEach(id=>document.getElementById(id).textContent=fmt(m));["bossBar","bossBar2"].forEach(id=>document.getElementById(id).style.width=Math.max(0,100*s.bossHP/m)+"%")}
-function attackBoss(){s.bossHP-=Math.max(1,Math.floor(s.power*totalMultiplier()));if(s.bossHP<=0){s.bossesDefeated++;addCoins(500*(s.bossIndex+1));let r=Math.random();if(r<.02)givePet("Galaxy Dominus");else if(r<.12)givePet("Dragon");else if(r<.35)s.tokens++;s.bossHP=bossMaxHP();checkAchievements();notify("Boss defeated! Rewards received!")}save();render()}
-function newBoss(){s.bossIndex=(s.bossIndex+1)%bossNames.length;s.bossHP=bossMaxHP();save();renderBoss()}
-function nextRarity(r){let i=rarities.indexOf(r);return i>=0&&i<rarities.length-1?rarities[i+1]:null}
-function renderFusion(){document.getElementById("fusionList").innerHTML=rarities.map(r=>{let count=s.petsOwned.filter(n=>petInfo(n)?.rarity===r).length,next=nextRarity(r),target=pets.filter(p=>p.rarity===next).sort((a,b)=>b.mult-a.mult)[0];return `<div class="item"><h4>${r}</h4><p>Owned: ${count}/5</p><p>Result: ${target?target.name:"No higher rarity"}</p><button ${count<5||!target?"disabled":""} onclick="fusePets('${r}')">Fuse 5</button></div>`}).join("")}
-function fusePets(r){let next=nextRarity(r),targets=pets.filter(p=>p.rarity===next);if(!targets.length)return notify("Cannot fuse this rarity!");if(s.petsOwned.filter(n=>petInfo(n)?.rarity===r).length<5)return notify("Need five pets!");let count=0;s.petsOwned=s.petsOwned.filter(n=>{if(petInfo(n)?.rarity===r&&count<5){count++;return false}return true});if(Math.random()<.8){let p=targets[Math.floor(Math.random()*targets.length)];givePet(p.name);notify("Fusion success: "+p.name+"!")}else notify("Fusion failed; pets were consumed.");save();render()}
-function todayKey(){let d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
-function claimDaily(){let t=todayKey();if(s.lastDaily===t)return notify("Already claimed today!");let y=new Date();y.setDate(y.getDate()-1);let yesterday=y.getFullYear()+"-"+(y.getMonth()+1)+"-"+y.getDate();s.dailyStreak=s.lastDaily===yesterday?s.dailyStreak+1:1;s.lastDaily=t;let reward=Math.min(1000*s.dailyStreak,10000);addCoins(reward);if(s.dailyStreak%7===0)s.tokens++;save();render();notify("Daily reward: "+fmt(reward)+" coins!")}
-function renderDaily(){let claimed=s.lastDaily===todayKey();document.getElementById("streak").textContent=s.dailyStreak;document.getElementById("dailyReward").textContent="Next reward: "+fmt(Math.min(1000*(s.dailyStreak+1),10000))+" coins";document.getElementById("dailyButton").disabled=claimed;document.getElementById("dailyButton").textContent=claimed?"Claimed Today":"Claim Daily Reward";document.getElementById("spinButton").disabled=s.lastWheel===todayKey()}
-function spinWheel(){if(s.lastWheel===todayKey())return notify("Already spun today!");s.lastWheel=todayKey();let r=Math.random(),msg;if(r<.4){let n=500+Math.floor(Math.random()*1501);addCoins(n);msg=fmt(n)+" coins"}else if(r<.65){addCoins(5000);msg="5,000 coins"}else if(r<.85){s.power+=5;msg="+5 power"}else if(r<.96){givePet("Dragon");msg="Dragon Pet"}else{s.tokens++;msg="Rebirth Token"}document.getElementById("wheelResult").textContent=msg;save();render();notify("Lucky Wheel: "+msg)}
-function checkAchievements(){for(let a of achievements)if(a.test(s)&&!s.claimedAchievements.includes(a.id)){s.claimedAchievements.push(a.id);addCoins(a.reward);notify("Achievement unlocked: "+a.name+"! +"+fmt(a.reward))}}
-function renderAchievements(){document.getElementById("achievementList").innerHTML=achievements.map(a=>`<div class="item"><h4>${s.claimedAchievements.includes(a.id)?"✅":"🏆"} ${a.name}</h4><p>${a.desc}</p><p>Reward: ${fmt(a.reward)} coins</p><button disabled>${s.claimedAchievements.includes(a.id)?"Claimed":a.test(s)?"Completed":"Not completed"}</button></div>`).join("")}
-function renderSkins(){document.getElementById("skinList").innerHTML=skins.map(sk=>{let owned=s.skinsUnlocked.includes(sk.name);return `<div class="item"><h4>${sk.emoji} ${sk.name}</h4><p>${fmt(sk.cost)} coins</p><button onclick="${owned?`equipSkin('${sk.name}')`:`buySkin('${sk.name}')`}">${s.equippedSkin===sk.name?"Equipped":owned?"Equip":"Unlock"}</button></div>`}).join("")}
-function buySkin(n){let sk=skins.find(x=>x.name===n);if(!sk||s.skinsUnlocked.includes(n))return;if(s.coins<sk.cost)return notify("Not enough coins!");s.coins-=sk.cost;s.skinsUnlocked.push(n);s.equippedSkin=n;save();render()}
-function equipSkin(n){if(!s.skinsUnlocked.includes(n))return;s.equippedSkin=n;save();render()}
-function renderCollection(){document.getElementById("collectionCount").textContent=s.discovered.length;document.getElementById("collectionTotal").textContent=pets.length;document.getElementById("collectionList").innerHTML=pets.map(p=>{let found=s.discovered.includes(p.name);return `<div class="petcard ${p.name==="Fattini Pet"?"fattini":p.name==="Owner Pet"?"owner":p.rarity==="Secret"?"secret":""}"><span class="petemoji">${found?p.emoji:"❔"}</span><b>${found?p.name:"Unknown Pet"}</b><small>${found?p.rarity:"Undiscovered"}</small><small>${found?"x"+fmt(p.mult):"???"}</small><small>${found?"Discovered":"Keep playing"}</small></div>`}).join("")}
-function renderStats(){for(let [id,v] of Object.entries({coins:fmt(s.coins),gems:fmt(s.gems),candy:fmt(s.candy),power:fmt(s.power),mult:"x"+fmt(totalMultiplier()),rebirths:fmt(s.rebirths),tokens:fmt(s.tokens),worldName:s.world}))document.getElementById(id).textContent=v;document.getElementById("upgradeCost").textContent=fmt(25*1.7**s.upgradeLevel);document.getElementById("superCost").textContent=fmt(500*2**s.superLevel);document.getElementById("autoCost").textContent=s.autoLevel>=4?"MAX":fmt([250,1500,7500,30000][s.autoLevel]);document.getElementById("autoInfo").textContent="Level "+s.autoLevel+" • "+[0,10,25,50,100][s.autoLevel]+" clicks/sec";document.getElementById("autoToggle").textContent="Auto: "+(s.autoEnabled?"ON":"OFF");document.getElementById("clickInfo").textContent="Each click earns "+fmt(clickReward())+" coins • Total clicks: "+fmt(s.totalClicks);document.getElementById("rebirthNeed").textContent=fmt(10000*5**s.rebirths)}
-function render(){renderStats();renderPets();renderWorlds();renderBoss();renderFusion();renderDaily();renderAchievements();renderSkins();renderCollection()}
-function exportSave(){let code=btoa(unescape(encodeURIComponent(JSON.stringify(s))));let el=document.getElementById("saveCode");el.value=code;el.select();try{document.execCommand("copy");notify("Save code copied if permitted.")}catch(e){notify("Copy the save code from the box.")}}
-function importSave(){try{let data=JSON.parse(decodeURIComponent(escape(atob(document.getElementById("saveCode").value.trim()))));if(typeof data.coins!=="number"||!Array.isArray(data.petsOwned))throw Error();s={...defaultState(),...data};s.petsOwned=s.petsOwned.filter(n=>petInfo(n));s.discovered=[...new Set([...(s.discovered||[]),...s.petsOwned])];updateAutoTimer();save();render();notify("Save imported!")}catch(e){notify("Invalid save code.")}}
-function loginAdmin(){if(document.getElementById("adminCode").value===ADMIN_CODE){adminUnlocked=true;document.getElementById("adminTools").style.display="block";notify("Admin unlocked!")}else notify("Incorrect admin code!")}
-function requireAdmin(){if(!adminUnlocked){notify("Unlock the admin panel first!");return false}return true}
-function numberInput(id){let el=document.getElementById(id),n=Number(el.value);if(el.value.trim()===""||!Number.isFinite(n)||n<0){notify("Enter a valid amount of 0 or more.");return null}return Math.floor(n)}
-function adminGiveCoins(){if(!requireAdmin())return;let n=numberInput("adminCoins");if(n===null)return;addCoins(n);save();render()}
-function adminSetCoins(){if(!requireAdmin())return;let n=numberInput("adminSetCoinsInput");if(n===null)return;s.coins=n;save();render();notify("Coins set to "+fmt(n))}
-function adminSetGems(){if(!requireAdmin())return;let n=numberInput("adminGems");if(n===null)return;s.gems=n;save();render()}
-function adminSetCandy(){if(!requireAdmin())return;let n=numberInput("adminCandy");if(n===null)return;s.candy=n;save();render()}
-function adminSetPower(){if(!requireAdmin())return;let n=numberInput("adminPower");if(n===null||n<1)return notify("Power must be at least 1");s.power=n;save();render()}
-function adminSetMultiplier(){if(!requireAdmin())return;let n=numberInput("adminMultiplier");if(n===null||n<1)return notify("Multiplier must be at least 1");s.adminMultiplier=n;save();render()}
-function adminGiveTokens(){if(!requireAdmin())return;let n=numberInput("adminTokens");if(n===null)return;s.tokens+=n;save();render()}
-function adminGivePet(){
-if(!requireAdmin())return;
-let n=document.getElementById("adminPet").value;
-if(n==="Owner Pet")return notify("⭐ Owner Pet can only be obtained with the code New Update!");
-givePet(n);save();render();notify("Pet granted!")
-}
-function adminSetAuto(){if(!requireAdmin())return;let n=Number(document.getElementById("adminAuto").value);if(!Number.isInteger(n)||n<0||n>4)return notify("Enter a level from 0 to 4");s.autoLevel=n;updateAutoTimer();save();render()}
-function adminUnlockWorlds(){if(!requireAdmin())return;s.worldsUnlocked=worlds.map(w=>w.name);checkAchievements();save();render()}
-function adminDefeatBoss(){if(!requireAdmin())return;s.bossesDefeated++;addCoins(10000);s.bossHP=bossMaxHP();checkAchievements();save();render()}
-function adminReset(){if(!requireAdmin())return;if(!confirm("Reset the entire save?"))return;s=defaultState();updateAutoTimer();save();render();notify("Save reset")}
+const OWNER_CODE="New Update";
+const Q=1e15; // one quadrillion
+const QUINTILLION=1e18;
+const DEMON_HP=1.2e18; // 1.2 quintillion: more than one quintillion
+const OWNER_BOSS_HP=100e18; // 100 quintillion
+const BOSS_DAMAGE=500*Q; // 500 quadrillion
 
-s.petsOwned=(s.petsOwned||[]).filter(n=>petInfo(n));
-s.discovered=[...new Set([...(s.discovered||[]),...s.petsOwned])];
-if(!worlds.some(w=>w.name===s.world)||!s.worldsUnlocked.includes(s.world))s.world="Starter";
-if(!Number.isFinite(s.bossHP)||s.bossHP<=0)s.bossHP=bossMaxHP();
-render();updateAutoTimer();
+const PETS=[
+{id:"ghost",name:"Ghost Pet",icon:"👻",mult:2,cost:250},
+{id:"bat",name:"Bat Pet",icon:"🦇",mult:5,cost:1500},
+{id:"blackcat",name:"Black Cat",icon:"🐈‍⬛",mult:10,cost:6000},
+{id:"witch",name:"Witch Pet",icon:"🧙",mult:25,cost:25000},
+{id:"demon",name:"Demon Pet",icon:"😈",mult:100,cost:150000},
+{id:"royal",name:"Royal Pet",icon:"👑",mult:500,cost:1000000},
+{id:"admin",name:"Admin Pet",icon:"🛠️",mult:10000,cost:null},
+{id:"fattini",name:"Fattini Pet",icon:"🍝",mult:100000,cost:null},
+{id:"owner",name:"Owner Pet",icon:"👑",mult:1000000000,cost:null}
+];
+const WORLDS=[
+{name:"Haunted Town",icon:"🎃",cost:0,mult:1},
+{name:"Ghost Forest",icon:"🌲",cost:5000,mult:2},
+{name:"Witch Swamp",icon:"🧙",cost:50000,mult:5},
+{name:"Vampire Castle",icon:"🧛",cost:500000,mult:15},
+{name:"Underworld",icon:"🔥",cost:5000000,mult:50}
+];
+const UPGRADES=[
+{name:"Stronger Click",desc:"+1 base click power",cost:25,scale:1.7,amount:1},
+{name:"Candy Gloves",desc:"+10 base click power",cost:300,scale:2,amount:10},
+{name:"Pumpkin Hammer",desc:"+100 base click power",cost:5000,scale:2.2,amount:100},
+{name:"Haunted Magic",desc:"+1,000 base click power",cost:75000,scale:2.4,amount:1000},
+{name:"Dark Energy",desc:"+10,000 base click power",cost:1500000,scale:2.6,amount:10000}
+];
+const TOKEN_UPGRADES=[
+{name:"Soul Strength",key:"strength",desc:"+25% click power per level",max:50,cost:1},
+{name:"Candy Magnet",key:"magnet",desc:"+10% candy earnings per level",max:50,cost:1},
+{name:"Lucky Souls",key:"luck",desc:"+5% candy earnings per level",max:20,cost:2}
+];
+const AUTOS=[
+{level:1,cps:1,cost:1000},{level:2,cps:5,cost:10000},
+{level:3,cps:10,cost:100000},{level:4,cps:25,cost:1000000},
+{level:5,cps:50,cost:10000000},{level:6,cps:100,cost:100000000}
+];
+const SKINS=[
+{id:"pumpkin",name:"Pumpkin",icon:"🎃",cost:0},
+{id:"ghost",name:"Ghost",icon:"👻",cost:500},
+{id:"bat",name:"Bat",icon:"🦇",cost:2500},
+{id:"crystal",name:"Magic Crystal",icon:"🔮",cost:15000},
+{id:"skull",name:"Skull",icon:"💀",cost:100000}
+];
+const ACHIEVEMENTS=[
+{id:"click100",name:"Candy Collector",desc:"Click 100 times",test:s=>s.clicks>=100,reward:250},
+{id:"click1000",name:"Clicking Legend",desc:"Click 1,000 times",test:s=>s.clicks>=1000,reward:2500},
+{id:"rich",name:"Candy Millionaire",desc:"Have 1,000,000 candy",test:s=>s.coins>=1000000,reward:10000},
+{id:"pets3",name:"Pet Keeper",desc:"Own 3 different pets",test:s=>Object.keys(s.pets).filter(k=>s.pets[k]>0).length>=3,reward:1000},
+{id:"rebirth1",name:"New Beginning",desc:"Perform your first rebirth",test:s=>s.rebirths>=1,reward:1000},
+{id:"boss1",name:"Boss Buster",desc:"Defeat a Halloween boss",test:s=>s.bossWins>=1,reward:1500},
+{id:"blackhole",name:"Cosmic Champion",desc:"Defeat a Black Hole boss",test:s=>s.blackHoleWins>=1,reward:1000000},
+{id:"owner",name:"Owner's Secret",desc:"Redeem the Owner Pet code",test:s=>s.ownerCodeUses>=1,reward:100}
+];
+
+const $=id=>document.getElementById(id);
+function freshState(){return{
+coins:0,gems:0,rebirths:0,tokens:0,power:1,adminMultiplier:1,
+upgrades:{},tokenUpgrades:{},autoLevel:0,autoOn:true,pets:{},equipped:"",
+worlds:[0],world:0,bossWins:0,bossHP:100,bossMaxHP:100,
+xp:0,level:1,clicks:0,achievements:[],dailyDate:"",wheelTime:0,
+skins:["pumpkin"],skin:"pumpkin",codes:[],ownerCodeUses:0,luckyBonus:0,
+petFusionLevels:{},blackHoleWins:0,blackHoleEntered:false,blackHoleBoss:"demon",
+demonWins:0,ownerBossWins:0,adminUnlocked:false,lastSave:Date.now()
+}}
+let s=freshState();
+function num(v){v=Number(v);if(!Number.isFinite(v))return"0";if(Math.abs(v)>=1e18)return (v/1e18).toLocaleString("en-US",{maximumFractionDigits:2})+" Qi";if(Math.abs(v)>=1e15)return(v/1e15).toLocaleString("en-US",{maximumFractionDigits:2})+" Qa";if(Math.abs(v)>=1e12)return(v/1e12).toLocaleString("en-US",{maximumFractionDigits:2})+" T";return Intl.NumberFormat("en-US",{notation:v>=1e6?"compact":"standard",maximumFractionDigits:2}).format(v)}
+function clamp(v,min=0,max=1e100){v=Number(v);if(!Number.isFinite(v))return min;return Math.min(max,Math.max(min,v))}
+function hasPet(id){return(s.pets[id]||0)>0}
+function petById(id){return PETS.find(p=>p.id===id)}
+function petMultiplier(id){const p=petById(id);return p?p.mult*Math.pow(2,s.petFusionLevels[id]||0):1}
+function equippedMultiplier(){return s.equipped&&hasPet(s.equipped)?petMultiplier(s.equipped):1}
+function totalMultiplier(){return Math.max(1,equippedMultiplier())*(1+s.rebirths*.5)*(1+(s.tokenUpgrades.magnet||0)*.1)*(1+(s.tokenUpgrades.luck||0)*.05)*(WORLDS[s.world]?.mult||1)*s.adminMultiplier}
+function clickPower(){return Math.max(1,s.power*(1+(s.tokenUpgrades.strength||0)*.25)*totalMultiplier())}
+function checkLevel(){while(s.xp>=s.level*100){s.xp-=s.level*100;s.level++}}
+function checkAchievements(){for(const a of ACHIEVEMENTS){if(!s.achievements.includes(a.id)&&a.test(s)){s.achievements.push(a.id);s.coins+=a.reward;notify("Achievement unlocked: "+a.name+"! +" +num(a.reward)+" candy.")}}}
+function notify(msg){$("clickMessage").textContent=msg}
+function earnCandy(n){s.coins+=Math.max(0,n);s.xp+=Math.max(1,Math.floor(Math.log10(Math.max(1,n)+10)));checkLevel();checkAchievements();renderStats()}
+function clickCandy(){const n=Math.max(1,Math.floor(clickPower()));earnCandy(n);s.clicks++;notify("+"+num(n)+" candy! 🎉");checkAchievements();saveGame(false)}
+$("clickButton").addEventListener("click",clickCandy);
+function saveGame(show){try{s.lastSave=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(s));if(show)$("saveMessage").textContent="Game saved successfully."}catch(e){if(show)$("saveMessage").textContent="Save failed. Export a backup."}}
+function applyLoaded(d){const base=freshState();s={...base,...d};s.pets=d.pets||{};s.upgrades=d.upgrades||{};s.tokenUpgrades=d.tokenUpgrades||{};s.petFusionLevels=d.petFusionLevels||{};s.worlds=Array.isArray(d.worlds)?d.worlds:[0];s.achievements=Array.isArray(d.achievements)?d.achievements:[];s.codes=Array.isArray(d.codes)?d.codes:[];s.skins=Array.isArray(d.skins)?d.skins:["pumpkin"];if(!Number.isFinite(s.coins))s.coins=0;if(!Number.isFinite(s.power)||s.power<1)s.power=1;if(s.equipped&&!hasPet(s.equipped))s.equipped="";s.world=Math.max(0,Math.min(WORLDS.length-1,Number(s.world)||0))}
+function loadGame(){try{const raw=localStorage.getItem(SAVE_KEY);if(raw)applyLoaded(JSON.parse(raw))}catch(e){s=freshState()}}
+function renderStats(){
+$("coins").textContent=num(s.coins);$("gems").textContent=num(s.gems);$("rebirths").textContent=num(s.rebirths);$("power").textContent=num(clickPower());
+$("quickCost").textContent=num(UPGRADES[0].cost*Math.pow(UPGRADES[0].scale,s.upgrades[0]||0));$("rebirthCost").textContent=num(rebirthCost());
+$("multiplierText").textContent="Total multiplier: ×"+num(totalMultiplier());$("worldLabel").textContent=(WORLDS[s.world]?.icon||"🌎")+" "+(WORLDS[s.world]?.name||"World");
+$("equippedLabel").textContent=s.equipped&&hasPet(s.equipped)?petById(s.equipped).name+" ×"+num(petMultiplier(s.equipped)):"No pet equipped";
+$("levelText").textContent="Level "+s.level;$("levelBar").style.width=Math.min(100,s.xp/(s.level*100)*100)+"%";$("levelProgress").textContent=num(s.xp)+" / "+num(s.level*100)+" XP";$("achievementSummary").textContent=s.achievements.length+" / "+ACHIEVEMENTS.length+" achievements completed.";
+$("clickButton").textContent=SKINS.find(x=>x.id===s.skin)?.icon||"🎃";$("autoStatus").textContent=s.autoLevel===0?"No auto clicker unlocked.":"Auto clicker level "+s.autoLevel+" · "+(s.autoOn?"ON":"OFF")+" · "+(AUTOS.find(a=>a.level===s.autoLevel)?.cps||0)+" clicks/second.";
+}
+function buyUpgrade(i){const u=UPGRADES[i];if(!u)return;const cost=Math.floor(u.cost*Math.pow(u.scale,s.upgrades[i]||0));if(s.coins<cost){alert("Not enough candy!");return}s.coins-=cost;s.power+=u.amount;s.upgrades[i]=(s.upgrades[i]||0)+1;renderAll();saveGame(false)}
+function rebirthCost(){return Math.floor(10000*Math.pow(5,s.rebirths))}
+function rebirth(){const cost=rebirthCost();if(s.coins<cost){alert("You need "+num(cost)+" candy.");return}if(!confirm("Rebirth resets candy, base power and upgrades. Your pets and gems stay. Continue?"))return;s.coins=0;s.power=1;s.upgrades={};s.rebirths++;s.tokens++;renderAll();saveGame(true)}
+function renderUpgrades(){
+$("upgradeList").innerHTML=UPGRADES.map((u,i)=>{const cost=Math.floor(u.cost*Math.pow(u.scale,s.upgrades[i]||0));return`<div class="item"><h3>⚡ ${u.name}</h3><p>${u.desc}<br>Level: ${s.upgrades[i]||0}</p><button onclick="buyUpgrade(${i})">Buy · ${num(cost)} candy</button></div>`}).join("");
+$("tokenUpgradeList").innerHTML=TOKEN_UPGRADES.map(u=>{const n=s.tokenUpgrades[u.key]||0;return`<div class="item"><h3>${u.name}</h3><p>${u.desc}<br>Level: ${n}/${u.max}</p><button onclick="buyTokenUpgrade('${u.key}',${u.max},${u.cost})">Upgrade · ${u.cost} token(s)</button></div>`}).join("")
+}
+function buyTokenUpgrade(key,max,cost){if((s.tokenUpgrades[key]||0)>=max){alert("Upgrade maxed!");return}if(s.tokens<cost){alert("Not enough tokens!");return}s.tokens-=cost;s.tokenUpgrades[key]=(s.tokenUpgrades[key]||0)+1;renderAll();saveGame(false)}
+function renderAuto(){$("autoList").innerHTML=AUTOS.map(a=>`<div class="item"><h3>🤖 Auto Level ${a.level}</h3><p>${a.cps} clicks per second<br>${s.autoLevel>=a.level?"Unlocked":"Price: "+num(a.cost)+" candy"}</p><button onclick="buyAuto(${a.level})">${s.autoLevel>=a.level?"Unlocked":"Buy · "+num(a.cost)}</button></div>`).join("")+`<div class="item"><h3>⏯️ Auto Clicker</h3><p>Toggle your auto clicker.</p><button onclick="toggleAuto()">${s.autoOn?"Turn OFF":"Turn ON"}</button></div>`}
+function buyAuto(level){const a=AUTOS.find(x=>x.level===level);if(!a)return;if(level<=s.autoLevel){alert("Already unlocked!");return}if(level!==s.autoLevel+1){alert("Unlock the previous level first.");return}if(s.coins<a.cost){alert("Not enough candy!");return}s.coins-=a.cost;s.autoLevel=level;renderAll();saveGame(false)}
+function toggleAuto(){s.autoOn=!s.autoOn;renderAll();saveGame(false)}
+function renderPets(){
+$("petList").innerHTML=PETS.map(p=>{const owned=s.pets[p.id]||0;let action="";
+if(p.id==="owner")action=`<p>Secret code or Black Hole victory reward only.</p>`;
+else if(p.id==="fattini"||p.id==="admin")action=`<p>Special reward only.</p>`;
+else action=`<p>Price: ${num(p.cost)} candy</p><button onclick="buyPet('${p.id}')">Buy pet</button>`;
+return`<div class="item"><div style="font-size:35px">${p.icon}</div><h3>${p.name}</h3><p>Multiplier: ×${num(petMultiplier(p.id))}<br>Owned: ${owned}</p>${action}${owned?`<button onclick="equipPet('${p.id}')">${s.equipped===p.id?"Equipped":"Equip"}</button><button onclick="releasePet('${p.id}')">Release one</button>`:""}</div>`}).join("")
+}
+function buyPet(id){const p=petById(id);if(!p||p.cost==null){alert("This pet is a special reward.");return}if(s.coins<p.cost){alert("Not enough candy!");return}s.coins-=p.cost;s.pets[id]=(s.pets[id]||0)+1;if(!s.equipped)s.equipped=id;renderAll();saveGame(false)}
+function equipPet(id){if(!hasPet(id)){alert("You do not own this pet.");return}s.equipped=id;renderAll();saveGame(false)}
+function releasePet(id){if(!hasPet(id))return;if(!confirm("Release one "+petById(id).name+"?"))return;s.pets[id]--;if(s.pets[id]<=0){delete s.pets[id];if(s.equipped===id)s.equipped=""}renderAll();saveGame(false)}
+function renderWorlds(){$("worldList").innerHTML=WORLDS.map((w,i)=>{const unlocked=s.worlds.includes(i);return`<div class="item"><div style="font-size:35px">${w.icon}</div><h3>${w.name}</h3><p>Multiplier: ×${w.mult}<br>${unlocked?"Unlocked":"Cost: "+num(w.cost)+" candy"}</p><button onclick="selectWorld(${i})">${s.world===i?"Current world":unlocked?"Travel here":"Unlock world"}</button></div>`}).join("")}
+function selectWorld(i){const w=WORLDS[i];if(!w)return;if(!s.worlds.includes(i)){if(s.coins<w.cost){alert("Not enough candy!");return}s.coins-=w.cost;s.worlds.push(i)}s.world=i;renderAll();saveGame(false)}
+function renderBoss(){const names=["Pumpkin King","Shadow Witch","Dread Vampire","Lord of the Underworld"];const arts=["👹","🧙","🧛","🔥"];const i=Math.min(3,s.bossWins);$("bossName").textContent=names[i];$("bossArt").textContent=arts[i];$("bossHealthText").textContent="Boss HP: "+num(Math.max(0,s.bossHP))+" / "+num(s.bossMaxHP);$("bossBar").style.width=Math.max(0,Math.min(100,s.bossHP/s.bossMaxHP*100))+"%"}
+function attackHalloweenBoss(){const damage=Math.max(1,Math.floor(clickPower()));s.bossHP-=damage;if(s.bossHP<=0){s.bossWins++;s.gems+=10+s.bossWins*2;earnCandy(1000*s.bossWins);s.bossMaxHP=Math.floor(s.bossMaxHP*1.7);s.bossHP=s.bossMaxHP;$("bossMessage").textContent="Boss defeated! You earned candy and gems. The next boss is stronger!"}else $("bossMessage").textContent="You dealt "+num(damage)+" damage!";checkAchievements();renderAll();saveGame(false)}
+function healHalloweenBoss(){if(s.coins<100){alert("Not enough candy!");return}s.coins-=100;s.bossHP=Math.min(s.bossMaxHP,s.bossHP+Math.floor(s.bossMaxHP*.25));renderAll()}
+function teleportBlackHole(){s.blackHoleEntered=true;$("blackHoleArena").classList.remove("hidden");$("blackHoleMessage").textContent="You have been teleported to the Black Hole Arena!";$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);if(s.blackHoleBoss==="owner"&& !s.adminUnlocked)s.blackHoleBoss="demon";renderBlackHole();saveGame(false)}
+function startOwnerBoss(){if(!s.adminUnlocked){$("bhMessage").textContent="Access denied. Unlock the Admin Panel first.";return}s.blackHoleBoss="owner";s.bhHP=OWNER_BOSS_HP;s.bhMaxHP=OWNER_BOSS_HP;s.bhBossDefeated=false;renderBlackHole();$("bhMessage").textContent="The Owner Boss has appeared! Prepare for battle.";saveGame(false)}
+function startDemonBoss(){s.blackHoleBoss="demon";s.bhHP=DEMON_HP;s.bhMaxHP=DEMON_HP;s.bhBossDefeated=false;renderBlackHole()}
+function renderBlackHole(){
+const owner=s.blackHoleBoss==="owner";
+if(!Number.isFinite(s.bhHP)||s.bhHP<=0)s.bhHP=owner?OWNER_BOSS_HP:DEMON_HP;
+if(!Number.isFinite(s.bhMaxHP)||s.bhMaxHP<=0)s.bhMaxHP=owner?OWNER_BOSS_HP:DEMON_HP;
+$("bhArt").textContent=owner?"👑":"😈";$("bhName").textContent=owner?"👑 Owner Boss":"😈 Black Hole Demon";
+$("bhType").textContent=owner?"OWNER-ONLY CHALLENGE":"DEMON BOSS";
+$("bhDescription").textContent=owner?"The ultimate boss guards the deepest black hole.":"A demon from beyond the universe with over one quintillion health.";
+$("bhHP").textContent="HP: "+num(Math.max(0,s.bhHP))+" / "+num(s.bhMaxHP);
+$("bhBar").style.width=Math.max(0,Math.min(100,s.bhHP/s.bhMaxHP*100))+"%";
+$("bhDamageText").textContent="Boss damage: 500 Qa";
+$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);
+}
+function attackBlackHoleBoss(){
+if(!s.blackHoleEntered){$("bhMessage").textContent="Teleport to the Black Hole first.";return}
+if(s.bhBossDefeated){$("bhMessage").textContent="This boss has already been defeated. Choose a boss to fight again.";return}
+const damage=Math.max(1,Math.floor(clickPower()));
+s.bhHP-=damage;
+if(s.bhHP<=0){s.bhHP=0;s.bhBossDefeated=true;blackHoleVictory(s.blackHoleBoss==="owner");}
+else $("bhMessage").textContent="You dealt "+num(damage)+" damage! The boss has "+num(s.bhHP)+" HP remaining.";
+renderBlackHole();renderStats();saveGame(false)
+}
+function blackHoleVictory(owner){
+s.blackHoleWins++;
+if(owner)s.ownerBossWins++;else s.demonWins++;
+// 1% Owner Pet; 99% grants BOTH Fattini and Admin Pets.
+if(Math.random()<.01){s.pets.owner=(s.pets.owner||0)+1;$("bhReward").textContent="🎉 1% JACKPOT! You won an Owner Pet! You now own "+s.pets.owner+" Owner Pet(s)."}
+else{s.pets.fattini=(s.pets.fattini||0)+1;s.pets.admin=(s.pets.admin||0)+1;$("bhReward").textContent="🍝🛠️ Reward: You received BOTH a Fattini Pet and an Admin Pet!"}
+s.gems+=1000;s.coins+=1000000;s.xp+=1000;checkLevel();checkAchievements();
+$("bhMessage").textContent="VICTORY! You defeated the "+(owner?"Owner Boss":"Black Hole Demon")+"!";$("bhAttackButton").disabled=true;
+}
+function resetBlackHoleBoss(){s.bhBossDefeated=false;$("bhAttackButton").disabled=false;if(s.blackHoleBoss==="owner"){s.bhHP=OWNER_BOSS_HP;s.bhMaxHP=OWNER_BOSS_HP}else{s.bhHP=DEMON_HP;s.bhMaxHP=DEMON_HP}$("bhReward").textContent="";$("bhMessage").textContent="A new battle begins!";renderBlackHole();saveGame(false)}
+function renderFusion(){const sel=$("fusionPet"),old=sel.value;sel.innerHTML=PETS.filter(p=>(s.pets[p.id]||0)>=3).map(p=>`<option value="${p.id}">${p.name} — ${s.pets[p.id]} owned</option>`).join("");if([...sel.options].some(o=>o.value===old))sel.value=old}
+function fusePets(){const id=$("fusionPet").value;if(!id||(s.pets[id]||0)<3){$("fusionMessage").textContent="You need three copies of the same pet.";return}s.pets[id]-=2;if(s.pets[id]<=0)delete s.pets[id];s.petFusionLevels[id]=(s.petFusionLevels[id]||0)+1;$("fusionMessage").textContent="Fusion complete! This pet's multiplier has doubled. One copy was consumed to make the stronger pet.";renderAll();saveGame(false)}
+function today(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function claimDaily(){if(s.dailyDate===today()){$("dailyMessage").textContent="You already claimed today's reward.";return}s.dailyDate=today();const reward=500+s.level*100;s.coins+=reward;s.gems+=5;s.xp+=50;checkLevel();$("dailyMessage").textContent="You received "+num(reward)+" candy, 5 gems, and 50 XP!";renderAll();saveGame(false)}
+function renderDaily(){const claimed=s.dailyDate===today();$("dailyText").textContent=claimed?"Today's reward has already been claimed.":"Reward: "+num(500+s.level*100)+" candy + 5 gems + 50 XP";$("dailyButton").disabled=claimed}
+function renderAchievements(){$("achievementList").innerHTML=ACHIEVEMENTS.map(a=>{const done=s.achievements.includes(a.id);return`<div class="item"><h3>${done?"🏆":"🔒"} ${a.name}</h3><p>${a.desc}<br>Reward: ${num(a.reward)} candy</p><span class="pill">${done?"Completed":"Not completed"}</span></div>`}).join("")}
+function renderSkins(){$("skinList").innerHTML=SKINS.map(k=>{const owned=s.skins.includes(k.id);return`<div class="item"><div style="font-size:35px">${k.icon}</div><h3>${k.name}</h3><p>${owned?"Unlocked":"Price: "+num(k.cost)+" candy"}</p><button onclick="useSkin('${k.id}')">${s.skin===k.id?"Equipped":owned?"Equip":"Unlock"}</button></div>`}).join("")}
+function useSkin(id){const k=SKINS.find(x=>x.id===id);if(!k)return;if(!s.skins.includes(id)){if(s.coins<k.cost){alert("Not enough candy!");return}s.coins-=k.cost;s.skins.push(id)}s.skin=id;renderAll();saveGame(false)}
+function spinWheel(){const now=Date.now();if(now-s.wheelTime<86400000){$("wheelMessage").textContent="The wheel is recharging. Come back later.";return}s.wheelTime=now;const r=Math.random();if(r<.5){const n=1000+Math.floor(Math.random()*5000);s.coins+=n;$("wheelMessage").textContent="You won "+num(n)+" candy!"}else if(r<.8){const n=5+Math.floor(Math.random()*16);s.gems+=n;$("wheelMessage").textContent="You won "+n+" gems!"}else{s.luckyBonus++;$("wheelMessage").textContent="Your next Gambler Machine play is free!"}renderAll();saveGame(false)}
+function renderCollection(){$("collectionStats").textContent="Pets discovered: "+Object.keys(s.pets).filter(k=>s.pets[k]>0).length+" / "+PETS.length;$("collectionList").innerHTML=PETS.map(p=>{const n=s.pets[p.id]||0;return`<div class="item"><div style="font-size:35px">${n?p.icon:"❔"}</div><h3>${n?p.name:"Unknown Pet"}</h3><p>${n?"Owned: "+n+" · ×"+num(petMultiplier(p.id)):"Not discovered"}</p></div>`}).join("")}
+function gamble(){if(s.luckyBonus>0)s.luckyBonus--;else{if(s.coins<500){$("gamblerMessage").textContent="You need 500 candy.";return}s.coins-=500}const r=Math.random();if(r<.02){s.pets.fattini=(s.pets.fattini||0)+1;$("gamblerMessage").textContent="🍝 You won the Fattini Pet! ×100,000!"}else if(r<.17){s.pets.admin=(s.pets.admin||0)+1;$("gamblerMessage").textContent="🛠️ You won the Admin Pet! ×10,000"}else if(r<.52){s.pets.royal=(s.pets.royal||0)+1;$("gamblerMessage").textContent="👑 You won the Royal Pet!"}else if(r<.7){const n=1000+Math.floor(Math.random()*3000);s.coins+=n;$("gamblerMessage").textContent="You won "+num(n)+" candy!"}else $("gamblerMessage").textContent="No prize this time! Owner Pet cannot be won here.";renderAll();saveGame(false)}
+function redeemCode(){
+const code=$("codeInput").value.trim();
+if(!code){$("codeMessage").textContent="Enter a code first.";return}
+if(code===OWNER_CODE){s.pets.owner=(s.pets.owner||0)+1;s.ownerCodeUses++;if(!s.equipped)s.equipped="owner";$("codeMessage").textContent="👑 Owner Pet redeemed! ×1,000,000,000. You now own "+s.pets.owner+". You may redeem this code again.";checkAchievements();renderAll();saveGame(false);return}
+const codes={"HALLOWEEN":"coins:5000","CANDY":"coins:1000","GHOST":"gems:25","SPOOKY":"coins:2500","FREEGEMS":"gems:10"};
+const key=code.toUpperCase(),reward=codes[key];if(!reward){$("codeMessage").textContent="Invalid code.";return}if(s.codes.includes(key)){$("codeMessage").textContent="You already used that code.";return}s.codes.push(key);const [kind,value]=reward.split(":");s[kind]+=Number(value);$("codeMessage").textContent="Code redeemed! You received "+value+" "+kind+".";renderAll();saveGame(false)
+}
+function loginAdmin(){if($("adminCode").value===ADMIN_CODE){s.adminUnlocked=true;$("adminTools").classList.remove("hidden");$("adminLoginMessage").textContent="Admin access granted! Owner Boss unlocked in the Black Hole.";renderAdminSelect();$("bhOwnerControls").classList.remove("hidden");saveGame(false)}else $("adminLoginMessage").textContent="Incorrect admin code."}
+function renderAdminSelect(){$("adminPet").innerHTML=PETS.filter(p=>p.id!=="owner").map(p=>`<option value="${p.id}">${p.name}</option>`).join("")}
+function adminSet(key,id){let v=clamp($(id).value,key==="power"||key==="adminMultiplier"?1:0);if(key==="autoLevel")v=Math.min(6,v);s[key]=v;renderAll();saveGame(false);$("adminMessage").textContent="Updated "+key+"."}
+function adminGivePet(){const id=$("adminPet").value;if(id==="owner"){$("adminMessage").textContent="Blocked: Owner Pet cannot be granted through the Admin Panel.";return}if(!petById(id)){return}s.pets[id]=(s.pets[id]||0)+1;if(!s.equipped)s.equipped=id;$("adminMessage").textContent="Granted "+petById(id).name+". Owner Pet is blocked.";renderAll();saveGame(false)}
+function adminUnlockWorlds(){s.worlds=WORLDS.map((_,i)=>i);renderAll();saveGame(false);$("adminMessage").textContent="All regular worlds unlocked."}
+function adminDefeatBoss(){s.bossWins++;s.gems+=20;s.bossMaxHP=Math.floor(s.bossMaxHP*1.7);s.bossHP=s.bossMaxHP;renderAll();saveGame(false);$("adminMessage").textContent="Halloween boss defeated."}
+function adminReset(){if(!confirm("Reset all saved progress? This cannot be undone."))return;localStorage.removeItem(SAVE_KEY);s=freshState();$("adminTools").classList.add("hidden");$("adminCode").value="";renderAll();$("adminMessage").textContent="Save reset."}
+function exportSave(){const data=JSON.stringify(s,null,2);$("saveText").value=data;const blob=new Blob([data],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="halloween-clicker-save.json";a.click();URL.revokeObjectURL(url);$("saveMessage").textContent="Backup exported."}
+function importSaveText(){try{const d=JSON.parse($("saveText").value);if(!d||typeof d!=="object"||!Object.hasOwn(d,"coins"))throw Error();if(!confirm("Replace your current game progress with this backup?"))return;applyLoaded(d);renderAll();saveGame(true);$("saveMessage").textContent="Backup imported."}catch(e){$("saveMessage").textContent="Invalid save backup."}}
+$("importFile").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{$("saveText").value=await f.text();importSaveText()}catch(err){$("saveMessage").textContent="Could not read file."}e.target.value=""});
+function renderAll(){renderStats();renderUpgrades();renderAuto();renderPets();renderWorlds();renderBoss();renderFusion();renderDaily();renderAchievements();renderSkins();renderCollection();renderAdminSelect();if(s.blackHoleEntered){$("blackHoleArena").classList.remove("hidden");$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);renderBlackHole()}}
+document.querySelectorAll("#nav button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));$("page-"+b.dataset.page).classList.remove("hidden")}));
+loadGame();renderAll();
+if(s.bhBossDefeated){$("bhAttackButton").disabled=true}
+setInterval(()=>{if(s.autoLevel>0&&s.autoOn){const a=AUTOS.find(x=>x.level===s.autoLevel);if(a)earnCandy(Math.floor(clickPower()*a.cps/5))}saveGame(false)},200);
 </script>
 </body>
 </html>
