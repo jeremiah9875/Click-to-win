@@ -46,13 +46,7 @@ main{min-width:0}
 .boss-btn{background:linear-gradient(135deg,#4c1b85,#1b082e);border-color:#c084fc}
 .reward{font-size:18px;color:#ffd28a}
 footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
-@media(max-width:700px){
-.layout{grid-template-columns:1fr;padding:8px}
-.sidebar{position:static;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
-.sidebar button{text-align:center;font-size:11px;padding:9px 3px;margin:0}
-.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-.panel{padding:12px}
-}
+@media(max-width:700px){.layout{grid-template-columns:1fr;padding:8px}.sidebar{position:static;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.sidebar button{text-align:center;font-size:11px;padding:9px 3px;margin:0}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:12px}}
 </style>
 </head>
 <body>
@@ -116,11 +110,11 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 </section>
 
 <section class="page hidden" id="page-pets">
-<div class="panel"><h2>🐾 Pet Shop</h2><p>Equip one pet at a time to multiply your candy earnings. You can own multiple copies.</p><div class="grid" id="petList"></div><div class="notice">👑 Owner Pet is obtainable through the New Update code or the Black Hole victory reward. It cannot be given by the Admin Panel or Gambler Machine.</div></div>
+<div class="panel"><h2>🐾 Pet Collection</h2><p>Equip one pet at a time to multiply candy earnings. You can own multiple copies of each pet.</p><div class="grid" id="petList"></div><div class="notice">👑 The Owner Pet can be earned through a secret code or the Black Hole boss reward. It cannot be given through the Admin Panel or Gambler Machine.</div></div>
 </section>
 
 <section class="page hidden" id="page-worlds">
-<div class="panel"><h2>🌎 Worlds</h2><div class="grid" id="worldList"></div><div class="notice">The Black Hole has its own separate boss arena. Use the Black Hole tab to travel there.</div></div>
+<div class="panel"><h2>🌎 Worlds</h2><div class="grid" id="worldList"></div><div class="notice">Visit the Black Hole tab for the special boss arena.</div></div>
 </section>
 
 <section class="page hidden" id="page-boss">
@@ -130,10 +124,10 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 <section class="page hidden" id="page-blackhole">
 <div class="panel center">
 <h2>🌌 BLACK HOLE WORLD</h2>
-<p>A mysterious black hole takes you to a distant arena where extremely powerful bosses await.</p>
+<p>Travel beyond the universe and challenge an extremely powerful boss.</p>
 <div style="font-size:clamp(70px,18vw,150px);filter:drop-shadow(0 0 25px #a855f7)">🌀</div>
 <button onclick="teleportBlackHole()" style="font-size:17px;padding:14px 22px">🌌 TELEPORT TO BLACK HOLE</button>
-<div class="notice" id="blackHoleMessage">Enter the arena to fight the Demon Boss. Owners can also challenge the Owner Boss after unlocking the Admin Panel.</div>
+<div class="notice" id="blackHoleMessage">Teleport to enter the arena.</div>
 <div id="blackHoleArena" class="boss-arena hidden">
 <div class="boss-art" id="bhArt">😈</div>
 <h2 id="bhName">Black Hole Demon</h2>
@@ -143,9 +137,11 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 <div class="progress"><div id="bhBar"></div></div>
 <p id="bhDamageText">Boss damage: 500 Qa</p>
 <div id="bhOwnerControls" class="hidden">
+<p>👑 The Owner Boss has 100 quintillion HP.</p>
 <button class="boss-btn" onclick="startOwnerBoss()">👑 Challenge Owner Boss</button>
 </div>
 <button class="boss-btn" id="bhAttackButton" onclick="attackBlackHoleBoss()">⚔️ ATTACK BOSS</button>
+<button class="boss-btn" onclick="resetBlackHoleBoss()">🔄 Fight This Boss Again</button>
 <div class="notice" id="bhMessage">Defeat the boss to roll for victory rewards!</div>
 <div id="bhReward" class="reward"></div>
 </div>
@@ -153,7 +149,7 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 </section>
 
 <section class="page hidden" id="page-fusion">
-<div class="panel"><h2>🧪 Pet Fusion</h2><p>Combine three copies of a pet into one stronger pet. Each fusion doubles its multiplier.</p><label for="fusionPet">Choose a pet</label><select id="fusionPet"></select><button onclick="fusePets()">Fuse 3 Pets</button><div class="notice" id="fusionMessage">You need three copies of a pet to fuse.</div></div>
+<div class="panel"><h2>🧪 Pet Fusion</h2><p>Fuse three copies of the same pet to increase its multiplier.</p><label for="fusionPet">Choose a pet</label><select id="fusionPet"></select><button onclick="fusePets()">Fuse 3 Pets</button><div class="notice" id="fusionMessage">You need three copies of a pet to fuse.</div></div>
 </section>
 
 <section class="page hidden" id="page-daily">
@@ -181,7 +177,7 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 </section>
 
 <section class="page hidden" id="page-codes">
-<div class="panel"><h2>🎟️ Secret Codes</h2><p>Redeem special rewards.</p><input id="codeInput" placeholder="Enter secret code" autocomplete="off"><button onclick="redeemCode()">Redeem Code</button><div class="notice" id="codeMessage">Owner Pet code: <strong>New Update</strong></div></div>
+<div class="panel"><h2>🎟️ Secret Codes</h2><p>Enter a secret code to claim a reward.</p><input id="codeInput" placeholder="Enter secret code" autocomplete="off"><button onclick="redeemCode()">Redeem Code</button><div class="notice" id="codeMessage">Enter a code to see if it works!</div></div>
 </section>
 
 <section class="page hidden" id="page-admin">
@@ -190,7 +186,7 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 </div>
 <div class="panel hidden" id="adminTools">
 <h2>🛠️ Admin Controls</h2>
-<p>The Owner Pet is excluded from admin pet grants. Unlocking the panel also enables the Owner Boss challenge in the Black Hole arena.</p>
+<p>Owner Pet is blocked from admin pet grants. Unlocking this panel reveals the Owner Boss challenge in the Black Hole arena.</p>
 <div class="grid">
 <div class="item"><h3>🍬 Set Candy</h3><input id="adminCoins" type="number" min="0"><button onclick="adminSet('coins','adminCoins')">Set Candy</button></div>
 <div class="item"><h3>💎 Set Gems</h3><input id="adminGems" type="number" min="0"><button onclick="adminSet('gems','adminGems')">Set Gems</button></div>
@@ -208,7 +204,7 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 </section>
 
 <section class="page hidden" id="page-save">
-<div class="panel"><h2>💾 Save / Load</h2><p>Your progress automatically saves in this browser.</p><button onclick="saveGame(true)">Save Now</button><button onclick="exportSave()">Export Save</button><button onclick="$('importFile').click()">Import File</button><input id="importFile" type="file" accept=".json,application/json" class="hidden"><textarea id="saveText" rows="5" placeholder="Save backup text"></textarea><button onclick="importSaveText()">Import Text Backup</button><div class="notice" id="saveMessage">Auto-save enabled.</div></div>
+<div class="panel"><h2>💾 Save / Load</h2><p>Progress automatically saves in this browser.</p><button onclick="saveGame(true)">Save Now</button><button onclick="exportSave()">Export Save</button><button onclick="$('importFile').click()">Import File</button><input id="importFile" type="file" accept=".json,application/json" class="hidden"><textarea id="saveText" rows="5" placeholder="Save backup text"></textarea><button onclick="importSaveText()">Import Text Backup</button><div class="notice" id="saveMessage">Auto-save enabled.</div></div>
 </section>
 </main>
 </div>
@@ -216,14 +212,13 @@ footer{text-align:center;color:#a894ba;padding:18px;font-size:12px}
 
 <script>
 "use strict";
-const SAVE_KEY="halloweenClickerDashboard_v3";
+const SAVE_KEY="halloweenClickerDashboard_v4";
 const ADMIN_CODE="Besto Friendo";
 const OWNER_CODE="New Update";
-const Q=1e15; // one quadrillion
-const QUINTILLION=1e18;
-const DEMON_HP=1.2e18; // 1.2 quintillion: more than one quintillion
-const OWNER_BOSS_HP=100e18; // 100 quintillion
-const BOSS_DAMAGE=500*Q; // 500 quadrillion
+const Q=1e15;
+const DEMON_HP=1.2e18;
+const OWNER_BOSS_HP=100e18;
+const BOSS_DAMAGE=500*Q;
 
 const PETS=[
 {id:"ghost",name:"Ghost Pet",icon:"👻",mult:2,cost:250},
@@ -275,7 +270,7 @@ const ACHIEVEMENTS=[
 {id:"rebirth1",name:"New Beginning",desc:"Perform your first rebirth",test:s=>s.rebirths>=1,reward:1000},
 {id:"boss1",name:"Boss Buster",desc:"Defeat a Halloween boss",test:s=>s.bossWins>=1,reward:1500},
 {id:"blackhole",name:"Cosmic Champion",desc:"Defeat a Black Hole boss",test:s=>s.blackHoleWins>=1,reward:1000000},
-{id:"owner",name:"Owner's Secret",desc:"Redeem the Owner Pet code",test:s=>s.ownerCodeUses>=1,reward:100}
+{id:"owner",name:"Owner's Secret",desc:"Redeem the secret Owner Pet code",test:s=>s.ownerCodeUses>=1,reward:100}
 ];
 
 const $=id=>document.getElementById(id);
@@ -285,11 +280,12 @@ upgrades:{},tokenUpgrades:{},autoLevel:0,autoOn:true,pets:{},equipped:"",
 worlds:[0],world:0,bossWins:0,bossHP:100,bossMaxHP:100,
 xp:0,level:1,clicks:0,achievements:[],dailyDate:"",wheelTime:0,
 skins:["pumpkin"],skin:"pumpkin",codes:[],ownerCodeUses:0,luckyBonus:0,
-petFusionLevels:{},blackHoleWins:0,blackHoleEntered:false,blackHoleBoss:"demon",
-demonWins:0,ownerBossWins:0,adminUnlocked:false,lastSave:Date.now()
+petFusionLevels:{},blackHoleWins:0,demonWins:0,ownerBossWins:0,
+blackHoleEntered:false,blackHoleBoss:"demon",bhHP:DEMON_HP,bhMaxHP:DEMON_HP,
+bhBossDefeated:false,adminUnlocked:false,lastSave:Date.now()
 }}
 let s=freshState();
-function num(v){v=Number(v);if(!Number.isFinite(v))return"0";if(Math.abs(v)>=1e18)return (v/1e18).toLocaleString("en-US",{maximumFractionDigits:2})+" Qi";if(Math.abs(v)>=1e15)return(v/1e15).toLocaleString("en-US",{maximumFractionDigits:2})+" Qa";if(Math.abs(v)>=1e12)return(v/1e12).toLocaleString("en-US",{maximumFractionDigits:2})+" T";return Intl.NumberFormat("en-US",{notation:v>=1e6?"compact":"standard",maximumFractionDigits:2}).format(v)}
+function num(v){v=Number(v);if(!Number.isFinite(v))return"0";if(Math.abs(v)>=1e18)return(v/1e18).toLocaleString("en-US",{maximumFractionDigits:2})+" quintillion";if(Math.abs(v)>=1e15)return(v/1e15).toLocaleString("en-US",{maximumFractionDigits:2})+" Qa";if(Math.abs(v)>=1e12)return(v/1e12).toLocaleString("en-US",{maximumFractionDigits:2})+" T";return Intl.NumberFormat("en-US",{notation:v>=1e6?"compact":"standard",maximumFractionDigits:2}).format(v)}
 function clamp(v,min=0,max=1e100){v=Number(v);if(!Number.isFinite(v))return min;return Math.min(max,Math.max(min,v))}
 function hasPet(id){return(s.pets[id]||0)>0}
 function petById(id){return PETS.find(p=>p.id===id)}
@@ -298,7 +294,7 @@ function equippedMultiplier(){return s.equipped&&hasPet(s.equipped)?petMultiplie
 function totalMultiplier(){return Math.max(1,equippedMultiplier())*(1+s.rebirths*.5)*(1+(s.tokenUpgrades.magnet||0)*.1)*(1+(s.tokenUpgrades.luck||0)*.05)*(WORLDS[s.world]?.mult||1)*s.adminMultiplier}
 function clickPower(){return Math.max(1,s.power*(1+(s.tokenUpgrades.strength||0)*.25)*totalMultiplier())}
 function checkLevel(){while(s.xp>=s.level*100){s.xp-=s.level*100;s.level++}}
-function checkAchievements(){for(const a of ACHIEVEMENTS){if(!s.achievements.includes(a.id)&&a.test(s)){s.achievements.push(a.id);s.coins+=a.reward;notify("Achievement unlocked: "+a.name+"! +" +num(a.reward)+" candy.")}}}
+function checkAchievements(){for(const a of ACHIEVEMENTS){if(!s.achievements.includes(a.id)&&a.test(s)){s.achievements.push(a.id);s.coins+=a.reward;notify("Achievement unlocked: "+a.name+"! +"+num(a.reward)+" candy.")}}}
 function notify(msg){$("clickMessage").textContent=msg}
 function earnCandy(n){s.coins+=Math.max(0,n);s.xp+=Math.max(1,Math.floor(Math.log10(Math.max(1,n)+10)));checkLevel();checkAchievements();renderStats()}
 function clickCandy(){const n=Math.max(1,Math.floor(clickPower()));earnCandy(n);s.clicks++;notify("+"+num(n)+" candy! 🎉");checkAchievements();saveGame(false)}
@@ -327,8 +323,8 @@ function buyAuto(level){const a=AUTOS.find(x=>x.level===level);if(!a)return;if(l
 function toggleAuto(){s.autoOn=!s.autoOn;renderAll();saveGame(false)}
 function renderPets(){
 $("petList").innerHTML=PETS.map(p=>{const owned=s.pets[p.id]||0;let action="";
-if(p.id==="owner")action=`<p>Secret code or Black Hole victory reward only.</p>`;
-else if(p.id==="fattini"||p.id==="admin")action=`<p>Special reward only.</p>`;
+if(p.id==="owner")action="<p>Secret code or Black Hole victory reward only.</p>";
+else if(p.id==="fattini"||p.id==="admin")action="<p>Special reward only.</p>";
 else action=`<p>Price: ${num(p.cost)} candy</p><button onclick="buyPet('${p.id}')">Buy pet</button>`;
 return`<div class="item"><div style="font-size:35px">${p.icon}</div><h3>${p.name}</h3><p>Multiplier: ×${num(petMultiplier(p.id))}<br>Owned: ${owned}</p>${action}${owned?`<button onclick="equipPet('${p.id}')">${s.equipped===p.id?"Equipped":"Equip"}</button><button onclick="releasePet('${p.id}')">Release one</button>`:""}</div>`}).join("")
 }
@@ -340,42 +336,75 @@ function selectWorld(i){const w=WORLDS[i];if(!w)return;if(!s.worlds.includes(i))
 function renderBoss(){const names=["Pumpkin King","Shadow Witch","Dread Vampire","Lord of the Underworld"];const arts=["👹","🧙","🧛","🔥"];const i=Math.min(3,s.bossWins);$("bossName").textContent=names[i];$("bossArt").textContent=arts[i];$("bossHealthText").textContent="Boss HP: "+num(Math.max(0,s.bossHP))+" / "+num(s.bossMaxHP);$("bossBar").style.width=Math.max(0,Math.min(100,s.bossHP/s.bossMaxHP*100))+"%"}
 function attackHalloweenBoss(){const damage=Math.max(1,Math.floor(clickPower()));s.bossHP-=damage;if(s.bossHP<=0){s.bossWins++;s.gems+=10+s.bossWins*2;earnCandy(1000*s.bossWins);s.bossMaxHP=Math.floor(s.bossMaxHP*1.7);s.bossHP=s.bossMaxHP;$("bossMessage").textContent="Boss defeated! You earned candy and gems. The next boss is stronger!"}else $("bossMessage").textContent="You dealt "+num(damage)+" damage!";checkAchievements();renderAll();saveGame(false)}
 function healHalloweenBoss(){if(s.coins<100){alert("Not enough candy!");return}s.coins-=100;s.bossHP=Math.min(s.bossMaxHP,s.bossHP+Math.floor(s.bossMaxHP*.25));renderAll()}
-function teleportBlackHole(){s.blackHoleEntered=true;$("blackHoleArena").classList.remove("hidden");$("blackHoleMessage").textContent="You have been teleported to the Black Hole Arena!";$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);if(s.blackHoleBoss==="owner"&& !s.adminUnlocked)s.blackHoleBoss="demon";renderBlackHole();saveGame(false)}
-function startOwnerBoss(){if(!s.adminUnlocked){$("bhMessage").textContent="Access denied. Unlock the Admin Panel first.";return}s.blackHoleBoss="owner";s.bhHP=OWNER_BOSS_HP;s.bhMaxHP=OWNER_BOSS_HP;s.bhBossDefeated=false;renderBlackHole();$("bhMessage").textContent="The Owner Boss has appeared! Prepare for battle.";saveGame(false)}
-function startDemonBoss(){s.blackHoleBoss="demon";s.bhHP=DEMON_HP;s.bhMaxHP=DEMON_HP;s.bhBossDefeated=false;renderBlackHole()}
+
+function teleportBlackHole(){
+s.blackHoleEntered=true;
+$("blackHoleArena").classList.remove("hidden");
+$("blackHoleMessage").textContent="🌀 Teleport successful! You have arrived at the Black Hole Arena.";
+$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);
+renderBlackHole();saveGame(false)
+}
+function startOwnerBoss(){
+if(!s.adminUnlocked){$("bhMessage").textContent="Access denied. Unlock the Admin Panel first.";return}
+s.blackHoleBoss="owner";s.bhHP=OWNER_BOSS_HP;s.bhMaxHP=OWNER_BOSS_HP;s.bhBossDefeated=false;
+$("bhAttackButton").disabled=false;$("bhReward").textContent="";
+renderBlackHole();$("bhMessage").textContent="👑 The Owner Boss has appeared!";saveGame(false)
+}
+function startDemonBoss(){
+s.blackHoleBoss="demon";s.bhHP=DEMON_HP;s.bhMaxHP=DEMON_HP;s.bhBossDefeated=false;
+$("bhAttackButton").disabled=false;$("bhReward").textContent="";renderBlackHole()
+}
 function renderBlackHole(){
 const owner=s.blackHoleBoss==="owner";
-if(!Number.isFinite(s.bhHP)||s.bhHP<=0)s.bhHP=owner?OWNER_BOSS_HP:DEMON_HP;
-if(!Number.isFinite(s.bhMaxHP)||s.bhMaxHP<=0)s.bhMaxHP=owner?OWNER_BOSS_HP:DEMON_HP;
-$("bhArt").textContent=owner?"👑":"😈";$("bhName").textContent=owner?"👑 Owner Boss":"😈 Black Hole Demon";
-$("bhType").textContent=owner?"OWNER-ONLY CHALLENGE":"DEMON BOSS";
-$("bhDescription").textContent=owner?"The ultimate boss guards the deepest black hole.":"A demon from beyond the universe with over one quintillion health.";
+$("bhArt").textContent=owner?"👑":"😈";
+$("bhName").textContent=owner?"👑 Owner Boss":"😈 Black Hole Demon";
+$("bhType").textContent=owner?"OWNER BOSS":"DEMON BOSS";
+$("bhDescription").textContent=owner?"The ultimate boss guards the deepest black hole.":"A demon from beyond the universe with more than one quintillion health.";
 $("bhHP").textContent="HP: "+num(Math.max(0,s.bhHP))+" / "+num(s.bhMaxHP);
 $("bhBar").style.width=Math.max(0,Math.min(100,s.bhHP/s.bhMaxHP*100))+"%";
-$("bhDamageText").textContent="Boss damage: 500 Qa";
-$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);
+$("bhDamageText").textContent="Boss damage: "+num(BOSS_DAMAGE);
+$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked)
 }
 function attackBlackHoleBoss(){
 if(!s.blackHoleEntered){$("bhMessage").textContent="Teleport to the Black Hole first.";return}
-if(s.bhBossDefeated){$("bhMessage").textContent="This boss has already been defeated. Choose a boss to fight again.";return}
+if(s.bhBossDefeated){$("bhMessage").textContent="This boss has already been defeated. Start a new fight.";return}
 const damage=Math.max(1,Math.floor(clickPower()));
-s.bhHP-=damage;
-if(s.bhHP<=0){s.bhHP=0;s.bhBossDefeated=true;blackHoleVictory(s.blackHoleBoss==="owner");}
-else $("bhMessage").textContent="You dealt "+num(damage)+" damage! The boss has "+num(s.bhHP)+" HP remaining.";
-renderBlackHole();renderStats();saveGame(false)
+s.bhHP=Math.max(0,s.bhHP-damage);
+if(s.bhHP<=0){
+s.bhBossDefeated=true;s.blackHoleWins++;
+if(s.blackHoleBoss==="owner")s.ownerBossWins++;else s.demonWins++;
+if(Math.random()<.01){
+s.pets.owner=(s.pets.owner||0)+1;
+$("bhReward").textContent="🎉 1% JACKPOT! You won an Owner Pet! Total Owner Pets: "+s.pets.owner;
+}else{
+s.pets.fattini=(s.pets.fattini||0)+1;
+s.pets.admin=(s.pets.admin||0)+1;
+$("bhReward").textContent="🍝🛠️ Reward: You received BOTH a Fattini Pet and an Admin Pet!";
 }
-function blackHoleVictory(owner){
-s.blackHoleWins++;
-if(owner)s.ownerBossWins++;else s.demonWins++;
-// 1% Owner Pet; 99% grants BOTH Fattini and Admin Pets.
-if(Math.random()<.01){s.pets.owner=(s.pets.owner||0)+1;$("bhReward").textContent="🎉 1% JACKPOT! You won an Owner Pet! You now own "+s.pets.owner+" Owner Pet(s)."}
-else{s.pets.fattini=(s.pets.fattini||0)+1;s.pets.admin=(s.pets.admin||0)+1;$("bhReward").textContent="🍝🛠️ Reward: You received BOTH a Fattini Pet and an Admin Pet!"}
 s.gems+=1000;s.coins+=1000000;s.xp+=1000;checkLevel();checkAchievements();
-$("bhMessage").textContent="VICTORY! You defeated the "+(owner?"Owner Boss":"Black Hole Demon")+"!";$("bhAttackButton").disabled=true;
+$("bhMessage").textContent="VICTORY! You defeated the "+(s.blackHoleBoss==="owner"?"Owner Boss":"Black Hole Demon")+"!";
+$("bhAttackButton").disabled=true;
+}else{
+$("bhMessage").textContent="You dealt "+num(damage)+" damage! Remaining HP: "+num(s.bhHP)+".";
 }
-function resetBlackHoleBoss(){s.bhBossDefeated=false;$("bhAttackButton").disabled=false;if(s.blackHoleBoss==="owner"){s.bhHP=OWNER_BOSS_HP;s.bhMaxHP=OWNER_BOSS_HP}else{s.bhHP=DEMON_HP;s.bhMaxHP=DEMON_HP}$("bhReward").textContent="";$("bhMessage").textContent="A new battle begins!";renderBlackHole();saveGame(false)}
+renderBlackHole();renderStats();renderPets();renderCollection();saveGame(false)
+}
+function resetBlackHoleBoss(){
+s.bhBossDefeated=false;
+if(s.blackHoleBoss==="owner"){s.bhHP=OWNER_BOSS_HP;s.bhMaxHP=OWNER_BOSS_HP}
+else{s.bhHP=DEMON_HP;s.bhMaxHP=DEMON_HP}
+$("bhAttackButton").disabled=false;$("bhReward").textContent="";$("bhMessage").textContent="The boss is ready for another fight.";
+renderBlackHole();saveGame(false)
+}
 function renderFusion(){const sel=$("fusionPet"),old=sel.value;sel.innerHTML=PETS.filter(p=>(s.pets[p.id]||0)>=3).map(p=>`<option value="${p.id}">${p.name} — ${s.pets[p.id]} owned</option>`).join("");if([...sel.options].some(o=>o.value===old))sel.value=old}
-function fusePets(){const id=$("fusionPet").value;if(!id||(s.pets[id]||0)<3){$("fusionMessage").textContent="You need three copies of the same pet.";return}s.pets[id]-=2;if(s.pets[id]<=0)delete s.pets[id];s.petFusionLevels[id]=(s.petFusionLevels[id]||0)+1;$("fusionMessage").textContent="Fusion complete! This pet's multiplier has doubled. One copy was consumed to make the stronger pet.";renderAll();saveGame(false)}
+function fusePets(){
+const id=$("fusionPet").value;
+if(!id||(s.pets[id]||0)<3){$("fusionMessage").textContent="You need three copies of the same pet.";return}
+s.pets[id]-=2;if(s.pets[id]<=0)delete s.pets[id];
+s.petFusionLevels[id]=(s.petFusionLevels[id]||0)+1;
+$("fusionMessage").textContent="Fusion complete! Two copies were combined into a stronger pet.";
+renderAll();saveGame(false)
+}
 function today(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
 function claimDaily(){if(s.dailyDate===today()){$("dailyMessage").textContent="You already claimed today's reward.";return}s.dailyDate=today();const reward=500+s.level*100;s.coins+=reward;s.gems+=5;s.xp+=50;checkLevel();$("dailyMessage").textContent="You received "+num(reward)+" candy, 5 gems, and 50 XP!";renderAll();saveGame(false)}
 function renderDaily(){const claimed=s.dailyDate===today();$("dailyText").textContent=claimed?"Today's reward has already been claimed.":"Reward: "+num(500+s.level*100)+" candy + 5 gems + 50 XP";$("dailyButton").disabled=claimed}
@@ -384,29 +413,72 @@ function renderSkins(){$("skinList").innerHTML=SKINS.map(k=>{const owned=s.skins
 function useSkin(id){const k=SKINS.find(x=>x.id===id);if(!k)return;if(!s.skins.includes(id)){if(s.coins<k.cost){alert("Not enough candy!");return}s.coins-=k.cost;s.skins.push(id)}s.skin=id;renderAll();saveGame(false)}
 function spinWheel(){const now=Date.now();if(now-s.wheelTime<86400000){$("wheelMessage").textContent="The wheel is recharging. Come back later.";return}s.wheelTime=now;const r=Math.random();if(r<.5){const n=1000+Math.floor(Math.random()*5000);s.coins+=n;$("wheelMessage").textContent="You won "+num(n)+" candy!"}else if(r<.8){const n=5+Math.floor(Math.random()*16);s.gems+=n;$("wheelMessage").textContent="You won "+n+" gems!"}else{s.luckyBonus++;$("wheelMessage").textContent="Your next Gambler Machine play is free!"}renderAll();saveGame(false)}
 function renderCollection(){$("collectionStats").textContent="Pets discovered: "+Object.keys(s.pets).filter(k=>s.pets[k]>0).length+" / "+PETS.length;$("collectionList").innerHTML=PETS.map(p=>{const n=s.pets[p.id]||0;return`<div class="item"><div style="font-size:35px">${n?p.icon:"❔"}</div><h3>${n?p.name:"Unknown Pet"}</h3><p>${n?"Owned: "+n+" · ×"+num(petMultiplier(p.id)):"Not discovered"}</p></div>`}).join("")}
-function gamble(){if(s.luckyBonus>0)s.luckyBonus--;else{if(s.coins<500){$("gamblerMessage").textContent="You need 500 candy.";return}s.coins-=500}const r=Math.random();if(r<.02){s.pets.fattini=(s.pets.fattini||0)+1;$("gamblerMessage").textContent="🍝 You won the Fattini Pet! ×100,000!"}else if(r<.17){s.pets.admin=(s.pets.admin||0)+1;$("gamblerMessage").textContent="🛠️ You won the Admin Pet! ×10,000"}else if(r<.52){s.pets.royal=(s.pets.royal||0)+1;$("gamblerMessage").textContent="👑 You won the Royal Pet!"}else if(r<.7){const n=1000+Math.floor(Math.random()*3000);s.coins+=n;$("gamblerMessage").textContent="You won "+num(n)+" candy!"}else $("gamblerMessage").textContent="No prize this time! Owner Pet cannot be won here.";renderAll();saveGame(false)}
+function gamble(){
+if(s.luckyBonus>0)s.luckyBonus--;else{if(s.coins<500){$("gamblerMessage").textContent="You need 500 candy.";return}s.coins-=500}
+const r=Math.random();
+if(r<.02){s.pets.fattini=(s.pets.fattini||0)+1;$("gamblerMessage").textContent="🍝 You won the Fattini Pet! ×100,000!"}
+else if(r<.17){s.pets.admin=(s.pets.admin||0)+1;$("gamblerMessage").textContent="🛠️ You won the Admin Pet! ×10,000"}
+else if(r<.52){s.pets.royal=(s.pets.royal||0)+1;$("gamblerMessage").textContent="👑 You won the Royal Pet!"}
+else if(r<.7){const n=1000+Math.floor(Math.random()*3000);s.coins+=n;$("gamblerMessage").textContent="You won "+num(n)+" candy!"}
+else $("gamblerMessage").textContent="No prize this time! Owner Pet cannot be won here.";
+renderAll();saveGame(false)
+}
 function redeemCode(){
 const code=$("codeInput").value.trim();
 if(!code){$("codeMessage").textContent="Enter a code first.";return}
-if(code===OWNER_CODE){s.pets.owner=(s.pets.owner||0)+1;s.ownerCodeUses++;if(!s.equipped)s.equipped="owner";$("codeMessage").textContent="👑 Owner Pet redeemed! ×1,000,000,000. You now own "+s.pets.owner+". You may redeem this code again.";checkAchievements();renderAll();saveGame(false);return}
-const codes={"HALLOWEEN":"coins:5000","CANDY":"coins:1000","GHOST":"gems:25","SPOOKY":"coins:2500","FREEGEMS":"gems:10"};
-const key=code.toUpperCase(),reward=codes[key];if(!reward){$("codeMessage").textContent="Invalid code.";return}if(s.codes.includes(key)){$("codeMessage").textContent="You already used that code.";return}s.codes.push(key);const [kind,value]=reward.split(":");s[kind]+=Number(value);$("codeMessage").textContent="Code redeemed! You received "+value+" "+kind+".";renderAll();saveGame(false)
+if(code===OWNER_CODE){
+s.pets.owner=(s.pets.owner||0)+1;s.ownerCodeUses++;
+if(!s.equipped)s.equipped="owner";
+$("codeMessage").textContent="👑 Secret reward redeemed! You received an Owner Pet. Total Owner Pets: "+s.pets.owner+".";
+checkAchievements();renderAll();saveGame(false);return
 }
-function loginAdmin(){if($("adminCode").value===ADMIN_CODE){s.adminUnlocked=true;$("adminTools").classList.remove("hidden");$("adminLoginMessage").textContent="Admin access granted! Owner Boss unlocked in the Black Hole.";renderAdminSelect();$("bhOwnerControls").classList.remove("hidden");saveGame(false)}else $("adminLoginMessage").textContent="Incorrect admin code."}
+const codes={"HALLOWEEN":"coins:5000","CANDY":"coins:1000","GHOST":"gems:25","SPOOKY":"coins:2500","FREEGEMS":"gems:10"};
+const key=code.toUpperCase(),reward=codes[key];
+if(!reward){$("codeMessage").textContent="Invalid code. Check the spelling and try again.";return}
+if(s.codes.includes(key)){$("codeMessage").textContent="You already used that code.";return}
+s.codes.push(key);const [kind,value]=reward.split(":");s[kind]+=Number(value);
+$("codeMessage").textContent="Code redeemed! You received "+value+" "+kind+".";
+renderAll();saveGame(false)
+}
+function loginAdmin(){
+if($("adminCode").value===ADMIN_CODE){
+s.adminUnlocked=true;$("adminTools").classList.remove("hidden");
+$("adminLoginMessage").textContent="Admin access granted! Owner Boss unlocked in the Black Hole.";
+renderAdminSelect();$("bhOwnerControls").classList.remove("hidden");saveGame(false)
+}else $("adminLoginMessage").textContent="Incorrect admin code."
+}
 function renderAdminSelect(){$("adminPet").innerHTML=PETS.filter(p=>p.id!=="owner").map(p=>`<option value="${p.id}">${p.name}</option>`).join("")}
-function adminSet(key,id){let v=clamp($(id).value,key==="power"||key==="adminMultiplier"?1:0);if(key==="autoLevel")v=Math.min(6,v);s[key]=v;renderAll();saveGame(false);$("adminMessage").textContent="Updated "+key+"."}
-function adminGivePet(){const id=$("adminPet").value;if(id==="owner"){$("adminMessage").textContent="Blocked: Owner Pet cannot be granted through the Admin Panel.";return}if(!petById(id)){return}s.pets[id]=(s.pets[id]||0)+1;if(!s.equipped)s.equipped=id;$("adminMessage").textContent="Granted "+petById(id).name+". Owner Pet is blocked.";renderAll();saveGame(false)}
+function adminSet(key,id){let v=clamp($(id).value,key==="power"||key==="adminMultiplier"?1:0);if(key==="autoLevel")v=Math.min(6,Math.floor(v));if(key==="rebirths"||key==="tokens"||key==="autoLevel")v=Math.floor(v);s[key]=v;renderAll();saveGame(false);$("adminMessage").textContent="Updated "+key+"."}
+function adminGivePet(){
+const id=$("adminPet").value;
+if(id==="owner"){$("adminMessage").textContent="Blocked: Owner Pet cannot be granted through the Admin Panel.";return}
+if(!petById(id))return;
+s.pets[id]=(s.pets[id]||0)+1;if(!s.equipped)s.equipped=id;
+$("adminMessage").textContent="Granted "+petById(id).name+". Owner Pet is blocked.";
+renderAll();saveGame(false)
+}
 function adminUnlockWorlds(){s.worlds=WORLDS.map((_,i)=>i);renderAll();saveGame(false);$("adminMessage").textContent="All regular worlds unlocked."}
 function adminDefeatBoss(){s.bossWins++;s.gems+=20;s.bossMaxHP=Math.floor(s.bossMaxHP*1.7);s.bossHP=s.bossMaxHP;renderAll();saveGame(false);$("adminMessage").textContent="Halloween boss defeated."}
 function adminReset(){if(!confirm("Reset all saved progress? This cannot be undone."))return;localStorage.removeItem(SAVE_KEY);s=freshState();$("adminTools").classList.add("hidden");$("adminCode").value="";renderAll();$("adminMessage").textContent="Save reset."}
 function exportSave(){const data=JSON.stringify(s,null,2);$("saveText").value=data;const blob=new Blob([data],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="halloween-clicker-save.json";a.click();URL.revokeObjectURL(url);$("saveMessage").textContent="Backup exported."}
 function importSaveText(){try{const d=JSON.parse($("saveText").value);if(!d||typeof d!=="object"||!Object.hasOwn(d,"coins"))throw Error();if(!confirm("Replace your current game progress with this backup?"))return;applyLoaded(d);renderAll();saveGame(true);$("saveMessage").textContent="Backup imported."}catch(e){$("saveMessage").textContent="Invalid save backup."}}
 $("importFile").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{$("saveText").value=await f.text();importSaveText()}catch(err){$("saveMessage").textContent="Could not read file."}e.target.value=""});
-function renderAll(){renderStats();renderUpgrades();renderAuto();renderPets();renderWorlds();renderBoss();renderFusion();renderDaily();renderAchievements();renderSkins();renderCollection();renderAdminSelect();if(s.blackHoleEntered){$("blackHoleArena").classList.remove("hidden");$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);renderBlackHole()}}
-document.querySelectorAll("#nav button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));$("page-"+b.dataset.page).classList.remove("hidden")}));
+function renderAll(){
+renderStats();renderUpgrades();renderAuto();renderPets();renderWorlds();renderBoss();renderFusion();renderDaily();renderAchievements();renderSkins();renderCollection();renderAdminSelect();
+if(s.blackHoleEntered){$("blackHoleArena").classList.remove("hidden");$("bhOwnerControls").classList.toggle("hidden",!s.adminUnlocked);renderBlackHole()}
+}
+document.querySelectorAll("#nav button").forEach(b=>b.addEventListener("click",()=>{
+document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));
+b.classList.add("active");
+document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+$("page-"+b.dataset.page).classList.remove("hidden")
+}));
 loadGame();renderAll();
-if(s.bhBossDefeated){$("bhAttackButton").disabled=true}
-setInterval(()=>{if(s.autoLevel>0&&s.autoOn){const a=AUTOS.find(x=>x.level===s.autoLevel);if(a)earnCandy(Math.floor(clickPower()*a.cps/5))}saveGame(false)},200);
+$("bhAttackButton").disabled=!!s.bhBossDefeated;
+setInterval(()=>{
+if(s.autoLevel>0&&s.autoOn){const a=AUTOS.find(x=>x.level===s.autoLevel);if(a)earnCandy(Math.floor(clickPower()*a.cps/5))}
+saveGame(false)
+},200);
 </script>
 </body>
 </html>
